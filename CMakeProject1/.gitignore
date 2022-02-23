@@ -3,6 +3,5 @@ CMakeLists.txt.user
 *~
 /**/*.xcodeproj/**/xcuserdata/
 /**/*.xcodeproj/**/xcshareddata/
-/extern/
 *.pyc
 *.log
