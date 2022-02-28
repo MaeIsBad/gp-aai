@@ -1,12 +1,18 @@
+#pragma once
 #include <SDL.h>
+#include "game/World.h"
 
-int main(int argc, char* argv[])
-{
+#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 800
+
+int main(int argc, char* argv[])  {
+    World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
+    
     if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         SDL_Window* window = NULL;
         SDL_Renderer* renderer = NULL;
 
-        if (SDL_CreateWindowAndRenderer(640, 480, 0, &window, &renderer) == 0) {
+        if (SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer) == 0) {
             SDL_bool done = SDL_FALSE;
 
             while (!done) {
@@ -22,6 +28,8 @@ int main(int argc, char* argv[])
                 SDL_RenderPresent(renderer);
 
                 while (SDL_PollEvent(&event)) {
+                    world->render(renderer);
+
                     if (event.type == SDL_QUIT) {
                         done = SDL_TRUE;
                     }
@@ -37,5 +45,7 @@ int main(int argc, char* argv[])
         }
     }
     SDL_Quit();
+    
+
     return 0;
 }

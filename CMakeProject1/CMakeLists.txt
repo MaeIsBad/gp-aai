@@ -22,7 +22,7 @@ endif()
 
 # Define executable target
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${CMAKE_BINARY_DIR})
-add_executable(CMakeDemo Main.cpp gl2/Context.cpp)
+add_executable(CMakeDemo Main.cpp gl2/Context.cpp game/World.cpp game/BaseEntity.cpp Vector2D.cpp)
 target_link_libraries(CMakeDemo ${SDL2_LIBS} ${OPENGL_LIBRARIES})
 
 # Copy SDL2 DLLs to output folder on Windows
