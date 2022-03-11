@@ -6,14 +6,14 @@
 
 class BaseEntity {
 
-private:
-   Vector2D& position;
+protected:
+   Vector2D position;
    World& world;
    double radius;
 
 public:
-   BaseEntity(Vector2D& p, World& w);
+   BaseEntity(Vector2D p, World& w);
    void update(float delta);
-   void render(SDL_Renderer* renderer);
+   virtual void render(SDL_Renderer* renderer);
 
 };

@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.1)
 project(CMakeDemo)
 
+if(MSVC)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+else()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+endif(MSVC)
+
 # Write demo-config.h
 message("Generating header file: ${CMAKE_BINARY_DIR}/demo-config.h")
 set(DEMO_ENABLE_MULTISAMPLE 0 CACHE BOOL "Enable multisample anti-aliasing")
@@ -22,7 +28,7 @@ endif()
 
 # Define executable target
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${CMAKE_BINARY_DIR})
-add_executable(CMakeDemo Main.cpp gl2/Context.cpp game/World.cpp game/BaseEntity.cpp Vector2D.cpp)
+add_executable(CMakeDemo Main.cpp gl2/Context.cpp game/World.cpp game/BaseEntity.cpp game/MovingEntity.cpp Vector2D.cpp)
 target_link_libraries(CMakeDemo ${SDL2_LIBS} ${OPENGL_LIBRARIES})
 
 # Copy SDL2 DLLs to output folder on Windows

@@ -1,13 +1,22 @@
-#pragma once
 #include "Vector2D.h"
+#include <iostream>
 
-Vector2D::Vector2D(double x, double y) {
-    this->x = x;
-    this->y = y;
-}
+using std::cout, std::endl;
 
-Vector2D Vector2D::operator+ (Vector2D v) {
+Vector2D::Vector2D(double x, double y) : x(x), y(y) {}
+
+Vector2D::Vector2D(const Vector2D& v) : Vector2D(v.x, v.y) {}
+
+Vector2D::Vector2D() : Vector2D(0, 0) {}
+Vector2D::~Vector2D() {}
+
+Vector2D& Vector2D::operator+ (const Vector2D& v) {
     this->x += v.x;
     this->y += v.y;
-    return this;
+    return *this;
+}
+Vector2D& Vector2D::operator= (const Vector2D& v) {
+    this->x = v.x;
+    this->y = v.y;
+    return *this;
 }
