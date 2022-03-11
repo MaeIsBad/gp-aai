@@ -30,8 +30,10 @@ if(NOT WIN32)
 endif()
 
 # Define executable target
+file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/*.cpp")
+message("SOURCES: ${SOURCES}")
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${CMAKE_BINARY_DIR})
-add_executable(gp-aai Main.cpp gl2/Context.cpp game/World.cpp game/BaseEntity.cpp game/MovingEntity.cpp Vector2D.cpp)
+add_executable(gp-aai ${SOURCES} gl2/Context.cpp)
 target_link_libraries(gp-aai ${SDL2_LIBS} ${OPENGL_LIBRARIES})
 
 # Copy SDL2 DLLs to output folder on Windows

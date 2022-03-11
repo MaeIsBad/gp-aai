@@ -4,7 +4,6 @@
 #include <thread>
 #include <chrono>
 
-
 using std::thread;
 
 #define WINDOW_HEIGHT 600
