@@ -2,9 +2,13 @@
 #include <vector>
 #include <SDL.h>
 #include <memory>
+#include "../Vector2D.h"
 class BaseEntity;
 
 using std::vector, std::shared_ptr;
+
+enum WorldEvent { mouseClick };
+
 class World {
 
 private:
@@ -15,6 +19,8 @@ private:
 public:
     World(int w, int h);
     void update(float delta);
-    virtual void render(SDL_Renderer* renderer);
+    void render(SDL_Renderer* renderer);
+    void event(WorldEvent e, Vector2D pos);
 
 };
+

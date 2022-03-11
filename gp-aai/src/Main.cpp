@@ -29,6 +29,9 @@ void display_loop(World* world) {
                 while (SDL_PollEvent(&event)) {
                     if (event.type == SDL_QUIT) {
                         done = SDL_TRUE;
+                    } else if(event.type == SDL_MOUSEBUTTONDOWN) {
+                        SDL_MouseButtonEvent ev = event.button;
+                        world->event(WorldEvent::mouseClick, Vector2D(ev.x, ev.y));
                     }
                 }
             }
@@ -55,6 +58,7 @@ int main(int argc, char* argv[])  {
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
     bool running = true;
 
+    // We're haning out references since this all isn't threadsafe anyways
     thread display_thread = thread(display_loop, world);
     thread logic_thread = thread(logic_loop, world, &running);
 

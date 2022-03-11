@@ -16,4 +16,8 @@ public:
     virtual void update(float delta);
     virtual void render(SDL_Renderer* renderer);
 
+    void setPosition(int x, int y);
+    void setPosition(const Vector2D pos);
+    Vector2D getPosition();
+
 };

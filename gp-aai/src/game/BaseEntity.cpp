@@ -35,3 +35,16 @@ void BaseEntity::render(SDL_Renderer* renderer) {
 		SDL_RenderDrawLine(renderer, start.x, start.y, end.x, end.y);
 	}
 }
+
+void BaseEntity::setPosition(int x, int y) {
+	this->position.x = x;
+	this->position.y = y;
+}
+
+void BaseEntity::setPosition(const Vector2D pos) {
+	return setPosition(pos.x, pos.y);
+}
+
+Vector2D BaseEntity::getPosition() {
+	return this->position;
+}
