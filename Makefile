@@ -1,3 +1,5 @@
+.PHONY := all debug build run gdb
+
 all: clean build run clean
 debug: clean build gdb clean
 
@@ -6,10 +8,10 @@ build:
 	cd build && cmake .. && make
 	
 run:
-	./build/CMakeProject1/CMakeDemo
-	
-clean:
-	rm -rf build
+	./build/gp-aai/gp-aai
 	
 gdb:
-	gdb ./build/CMakeProject1/CMakeDemo
+	gdb ./build/gp-aai/gp-aai
+
+clean:
+	rm -rf build

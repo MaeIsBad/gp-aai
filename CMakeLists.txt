@@ -3,7 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-project ("CMakeProject1")
+project ("gp-aai")
 
 # Include sub-projects.
-add_subdirectory ("CMakeProject1")
+add_subdirectory ("gp-aai")

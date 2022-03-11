@@ -5,6 +5,10 @@ using std::cout, std::endl;
 
 MovingEntity::MovingEntity(Vector2D p, World& w, Vector2D v, double m, double ms) : BaseEntity(p, w), velocity(v), mass(m), maxSpeed(ms) {}
 
+void MovingEntity::update(float delta) {
+	position.y += 10;
+}
+
 void MovingEntity::render(SDL_Renderer* renderer) {
 	//cout << "MovingEntity render @ " << position.x << ", " << position.y << endl;
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);

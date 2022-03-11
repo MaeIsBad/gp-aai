@@ -1,14 +1,16 @@
 #include <SDL.h>
 #include "game/World.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
+
+
+using std::thread;
 
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
 
-int main(int argc, char* argv[])  {
-    World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
-    
-    
+void display_loop(World* world) {
     if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         SDL_Window* window = NULL;
         SDL_Renderer* renderer = NULL;
@@ -41,7 +43,25 @@ int main(int argc, char* argv[])  {
         }
     }
     SDL_Quit();
-    
+}
 
+void logic_loop(World* world, bool* running) {
+    while(*running) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        world->update(1);
+    }
+}
+
+int main(int argc, char* argv[])  {
+    World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
+    bool running = true;
+
+    thread display_thread = thread(display_loop, world);
+    thread logic_thread = thread(logic_loop, world, &running);
+
+    // Wait for display thread to finish
+    display_thread.join();
+    running = false;
+    logic_thread.join();
     return 0;
 }
