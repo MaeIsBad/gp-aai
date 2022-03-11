@@ -1,1 +1,0 @@
-/nix/store/kb3x3n7f62ssrmmv4fy8shp4m9cfajl8-gcc-wrapper-10.3.0/bin/g++  -std=c++17 -rdynamic CMakeFiles/CMakeDemo.dir/Main.cpp.o CMakeFiles/CMakeDemo.dir/gl2/Context.cpp.o CMakeFiles/CMakeDemo.dir/game/World.cpp.o CMakeFiles/CMakeDemo.dir/game/BaseEntity.cpp.o CMakeFiles/CMakeDemo.dir/game/MovingEntity.cpp.o CMakeFiles/CMakeDemo.dir/Vector2D.cpp.o -o CMakeDemo  -lSDL2 -lGL 
