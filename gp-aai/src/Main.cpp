@@ -3,8 +3,9 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include "tests/Vector2DTests.hpp"
 
-using std::thread;
+using std::thread, std::cout, std::endl;
 
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
@@ -49,12 +50,15 @@ void display_loop(World* world) {
 
 void logic_loop(World* world, bool* running) {
     while(*running) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 30));
         world->update(1);
     }
 }
 
 int main(int argc, char* argv[])  {
+    // Run tests first
+    run_Vector2D_tests();
+
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
     bool running = true;
 

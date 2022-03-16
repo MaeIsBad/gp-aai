@@ -1,5 +1,6 @@
 #pragma once
 class MovingEntity;
+#include "../util/Vector2D.h"
 
 class SteeringBehaviour {
 protected:
@@ -7,13 +8,19 @@ protected:
 
 public:
 	SteeringBehaviour(MovingEntity& me);
-	virtual void calculate();
+	virtual Vector2D calculate();
 };
 
 class SeekBehaviour : public SteeringBehaviour {
 public:
 	SeekBehaviour(MovingEntity& me);
-	void calculate();
+	Vector2D calculate() override;
+};
+
+class ObstacleAvoidanceBehaviour : public SteeringBehaviour {
+public:
+	ObstacleAvoidanceBehaviour(MovingEntity& me);
+	Vector2D calculate() override;
 };
 
 #include "MovingEntity.h"
