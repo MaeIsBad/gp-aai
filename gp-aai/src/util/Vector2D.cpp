@@ -33,6 +33,18 @@ Vector2D Vector2D::truncate(double max) {
     return v;
 }
 
+Vector2D Vector2D::rotate(double a) {
+    // Get product of (not making a matrix class for this one time)
+    // ⌜ cos ɑ  -sin ɑ ⌝   ⌜ x ⌝
+    // ⌞ sin ɑ  cos ɑ  ⌟ x ⌞ y ⌟
+
+    double cos_a = cos(a);
+    double sin_a = sin(a);
+    double tmp_x = cos_a * this->x  +  -sin_a * this->y;
+    double tmp_y = sin_a * this->x  +  cos_a * this->y;
+    return Vector2D(tmp_x, tmp_y);
+}
+
 string Vector2D::toString() const {
     return string("Vector2D(" + to_string(this->x) + ", " + to_string(this->y) + ")");
 }

@@ -4,7 +4,7 @@
 #include <iostream>
 #include "../util/instanceof.hpp"
 
-#define __OBSTACLEAVOIDANCE_RADIUS 200
+#define __OBSTACLEAVOIDANCE_RADIUS 50
 #define __OBSTACLEAVOIDANCE_BOUNDING 10
 
 using std::cout, std::endl;
@@ -35,10 +35,10 @@ Vector2D ObstacleAvoidanceBehaviour::calculate() {
 		if(instanceof<Birb>(entity.entity.get()))
 			continue;
 
-		if((pos - entity.local_position).length() > __OBSTACLEAVOIDANCE_RADIUS)
+		if((pos - entity.entity->getPosition()).length() > __OBSTACLEAVOIDANCE_RADIUS)
 			continue;
 
-		cout << "Entity at " << entity.local_position.x << ", " << entity.local_position.y << " and distance of " << (pos - entity.local_position).length() << endl;
+		cout << "Entity at " << entity.local_position.x << ", " << entity.local_position.y << " and distance of " << (pos - entity.entity->getPosition()).length() << endl;
 
 	}
 

@@ -16,12 +16,17 @@ void MovingEntity::update(float delta) {
 }
 
 void MovingEntity::render(SDL_Renderer* renderer) {
-	//cout << "MovingEntity render @ " << position.x << ", " << position.y << endl;
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-	SDL_RenderDrawLine(renderer, position.x, position.y, position.x + 5, position.y + 15);
-	SDL_RenderDrawLine(renderer, position.x - 5, position.y + 15, position.x, position.y);
-	SDL_RenderDrawLine(renderer, position.x - 5, position.y + 15, position.x + 5, position.y + 15);
 
+	double h = acos(this->velocity.normalize().x);
+	Vector2D p1 = Vector2D(0, -10).rotate(h) + position;
+	Vector2D p2 = Vector2D(4, 10).rotate(h) + position;
+	Vector2D p3 = Vector2D(-4, 10).rotate(h) + position;
+
+	SDL_RenderDrawLine(renderer, p1.x, p1.y, p2.x, p2.y);
+	SDL_RenderDrawLine(renderer, p2.x, p2.y, p3.x, p3.y);
+	SDL_RenderDrawLine(renderer, p3.x, p3.y, p1.x, p1.y);
+	
 	SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE);
 	SDL_RenderDrawLine(renderer, position.x, position.y, position.x + (velocity.x * 10), position.y + (velocity.y * 10));
 }
@@ -36,22 +41,13 @@ Vector2D MovingEntity::getVelocity() {
 const vector<LocalizedEntity> MovingEntity::getLocalEntities() {
 	auto local_entities = vector<LocalizedEntity>();
 	
-	double a = M_PI / 2 - acos(this->velocity.normalize().x); // get angle
-	double cos_a = cos(a);
-	double sin_a = sin(a);
+	double a = M_PI * 2 - acos(this->velocity.normalize().x); // get angle
 
 	for(auto entity : this->world.getEntities()) {
 		Vector2D new_pos = entity->getPosition() - this->position;
 
-		// Get product of (not making a matrix class for this one time)
-		// ⌜ cos ɑ  -sin ɑ ⌝   ⌜ x ⌝
-		// ⌞ sin ɑ  cos ɑ  ⌟ x ⌞ y ⌟
-
-		double tmp_x = cos_a * new_pos.x  +  -sin_a * new_pos.y;
-		double tmp_y = sin_a * new_pos.x  +  cos_a * new_pos.y;
-
 		local_entities.push_back(LocalizedEntity {
-			Vector2D(tmp_x, tmp_y),
+			new_pos.rotate(a),
 			entity
 		});
 	}
@@ -60,4 +56,4 @@ const vector<LocalizedEntity> MovingEntity::getLocalEntities() {
 }
 
 
-Birb::Birb(Vector2D p, World& w) : MovingEntity(p, w, Vector2D(-1, -1), 1000, 2, *new ObstacleAvoidanceBehaviour(*this)) {}
+Birb::Birb(Vector2D p, World& w) : MovingEntity(p, w, Vector2D(-1, -1), 1000, 2, *new SeekBehaviour(*this)) {}

@@ -17,6 +17,7 @@ public:
     double length();
     Vector2D normalize();
     Vector2D truncate(double max);
+    Vector2D rotate(double a);
     Vector2D& operator= (const Vector2D& v);
     string toString() const;
 
