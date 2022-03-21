@@ -1,34 +1,55 @@
 #include "MovingEntity.h"
-#include <iostream>
 #include "SteeringBehaviour.h"
 #include <cmath>
+#include <iostream>
+#include <string>
 
-using std::cout, std::endl;
+using std::cout, std::endl, std::string;
 
-MovingEntity::MovingEntity(Vector2D p, World& w, Vector2D v, double m, double ms, SteeringBehaviour& sb) : BaseEntity(p, w), velocity(v), mass(m), maxSpeed(ms), sb(sb) {}
+MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms, SteeringBehaviour& sb) : BaseEntity(n, p, w), velocity(v), mass(m), maxSpeed(ms), sb(sb) {
+	this->shapes.pop_back();
 
-void MovingEntity::update(float delta) {
-	Vector2D force = Vector2D(velocity);
-	force = force + this->sb.calculate() / this->mass * delta;
-	force = force.truncate(this->getMaxSpeed());
-	this->position = this->position + force;
-	this->velocity = force;
+
+	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
+	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
+	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
+	this->updateLines();
 }
 
-void MovingEntity::render(SDL_Renderer* renderer) {
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+double MovingEntity::getAngle() {
+	Vector2D angle = this->velocity.normalize();
+	double h = asin(angle.y) + M_PI / 2;
+	if(angle.x < 0) h = 2 * M_PI - h;
+	return h;
+}
 
-	double h = acos(this->velocity.normalize().x);
+void MovingEntity::updateLines() {
+	double h = this->getAngle();
+
 	Vector2D p1 = Vector2D(0, -10).rotate(h) + position;
 	Vector2D p2 = Vector2D(4, 10).rotate(h) + position;
 	Vector2D p3 = Vector2D(-4, 10).rotate(h) + position;
 
-	SDL_RenderDrawLine(renderer, p1.x, p1.y, p2.x, p2.y);
-	SDL_RenderDrawLine(renderer, p2.x, p2.y, p3.x, p3.y);
-	SDL_RenderDrawLine(renderer, p3.x, p3.y, p1.x, p1.y);
+	dynamic_cast<Line*>(this->shapes[0])->start = p1;
+	dynamic_cast<Line*>(this->shapes[0])->end = p2;
+
+	dynamic_cast<Line*>(this->shapes[1])->start = p2;
+	dynamic_cast<Line*>(this->shapes[1])->end = p3;
 	
-	SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE);
-	SDL_RenderDrawLine(renderer, position.x, position.y, position.x + (velocity.x * 10), position.y + (velocity.y * 10));
+	dynamic_cast<Line*>(this->shapes[2])->start = p3;
+	dynamic_cast<Line*>(this->shapes[2])->end = p1;
+}
+
+void MovingEntity::update(float delta) {
+	Vector2D force = Vector2D(velocity);
+
+	SeekBehaviour ssb = SeekBehaviour(*this);
+
+	force = force + (this->sb.calculate() + ssb.calculate()) / this->mass * delta;
+	force = force.truncate(this->getMaxSpeed());
+	this->position = this->position + force;
+	this->velocity = force;
+	this->updateLines();
 }
 
 double MovingEntity::getMaxSpeed() { 
@@ -41,13 +62,9 @@ Vector2D MovingEntity::getVelocity() {
 const vector<LocalizedEntity> MovingEntity::getLocalEntities() {
 	auto local_entities = vector<LocalizedEntity>();
 	
-	double a = M_PI * 2 - acos(this->velocity.normalize().x); // get angle
-
 	for(auto entity : this->world.getEntities()) {
-		Vector2D new_pos = entity->getPosition() - this->position;
-
 		local_entities.push_back(LocalizedEntity {
-			new_pos.rotate(a),
+			this->toLocalSpace(entity->getPosition()),
 			entity
 		});
 	}
@@ -55,5 +72,17 @@ const vector<LocalizedEntity> MovingEntity::getLocalEntities() {
 	return local_entities;
 }
 
+Vector2D MovingEntity::toLocalSpace(Vector2D v) {
+	double a = this->getAngle();
+	Vector2D new_pos = v - this->position;
+	return new_pos.rotate(a);
+}
 
-Birb::Birb(Vector2D p, World& w) : MovingEntity(p, w, Vector2D(-1, -1), 1000, 2, *new SeekBehaviour(*this)) {}
+Vector2D MovingEntity::toWorldSpace(Vector2D v) {
+	double a = this->getAngle();
+	Vector2D new_pos = v - this->position;
+	return new_pos.rotate(-a);
+}
+
+
+Birb::Birb(Vector2D p, World& w) : MovingEntity("BIRB", p, w, Vector2D(), 50, 2, *new ObstacleAvoidanceBehaviour(*this, 100)) {}

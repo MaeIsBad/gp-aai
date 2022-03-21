@@ -1,5 +1,6 @@
 #include <cassert>
 #include <iostream>
+#include <cmath>
 #include "../util/Vector2D.h"
 
 using std::cout, std::endl;
@@ -72,6 +73,14 @@ void run_Vector2D_tests() {
     assert(v10.x > 0.2999); assert(v10.x < 0.3001);
     assert(v10.y > 0.6999); assert(v10.y < 0.7001);
 
+    // Rotation
+    Vector2D v11 = Vector2D(10, 0);
+    Vector2D v12 = v11.rotate(M_PI / 2);
+    Vector2D v13 = v11.rotate(M_PI / 4);
+    cout << "v11: " << v11 << ", v12: " << v12 << ", v13: " << v13 << endl;
+
+    Vector2D v14 = v11.rotate(M_PI * 3 / 2).normalize();
+    cout << "v14: " << v14 << endl;
 
     cout << "Tests succeeded" << endl;
 

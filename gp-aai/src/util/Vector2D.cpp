@@ -1,8 +1,8 @@
 #include "Vector2D.h"
-#include <iostream>
 #include <cmath>
-#include <string>
+#include <iostream>
 #include <sstream>
+#include <string>
 
 using std::cout, std::endl, std::string, std::ostream, std::to_string;
 

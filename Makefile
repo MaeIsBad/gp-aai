@@ -5,7 +5,7 @@ debug: clean build gdb clean
 
 build:
 	mkdir build || true
-	cd build && cmake .. && time make
+	cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && time make
 	
 run:
 	./build/gp-aai/gp-aai

@@ -62,7 +62,7 @@ int main(int argc, char* argv[])  {
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
     bool running = true;
 
-    // We're haning out references since this all isn't threadsafe anyways
+    // We're handing out references since this all isn't threadsafe anyways
     thread display_thread = thread(display_loop, world);
     thread logic_thread = thread(logic_loop, world, &running);
 

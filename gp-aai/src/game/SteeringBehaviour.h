@@ -3,24 +3,26 @@ class MovingEntity;
 #include "../util/Vector2D.h"
 
 class SteeringBehaviour {
-protected:
-	MovingEntity& entity;
+	protected:
+		MovingEntity& entity;
 
-public:
-	SteeringBehaviour(MovingEntity& me);
-	virtual Vector2D calculate();
+	public:
+		SteeringBehaviour(MovingEntity& me);
+		virtual Vector2D calculate();
 };
 
 class SeekBehaviour : public SteeringBehaviour {
-public:
-	SeekBehaviour(MovingEntity& me);
-	Vector2D calculate() override;
+	public:
+		SeekBehaviour(MovingEntity& me);
+		Vector2D calculate() override;
 };
 
 class ObstacleAvoidanceBehaviour : public SteeringBehaviour {
-public:
-	ObstacleAvoidanceBehaviour(MovingEntity& me);
-	Vector2D calculate() override;
+	private:
+		double detection_radius;
+	public:
+		ObstacleAvoidanceBehaviour(MovingEntity& me, double detection_radius);
+		Vector2D calculate() override;
 };
 
 #include "MovingEntity.h"
