@@ -6,6 +6,7 @@ mkShell {
     gdb
     cmake
     SDL2
+    neofetch
   ];
 }
 

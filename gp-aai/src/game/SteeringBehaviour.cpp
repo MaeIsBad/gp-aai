@@ -22,6 +22,15 @@ Vector2D SeekBehaviour::calculate() {
 	return force - entity.getVelocity();
 }
 
+ArriveBehaviour::ArriveBehaviour(MovingEntity& me) : SteeringBehaviour(me) {}
+Vector2D ArriveBehaviour::calculate() {
+	Vector2D pos = entity.getPosition();
+	Vector2D goal = entity.getWorld().getSeekPosition();
+	Vector2D force = 1 / (goal - pos) * 10;
+
+	return force - entity.getVelocity();
+}
+
 ObstacleAvoidanceBehaviour::ObstacleAvoidanceBehaviour(MovingEntity& me, double detection_radius) : SteeringBehaviour(me), detection_radius(detection_radius) {}
 Vector2D ObstacleAvoidanceBehaviour::calculate() {
 	Vector2D pos = entity.getPosition();
@@ -37,7 +46,7 @@ Vector2D ObstacleAvoidanceBehaviour::calculate() {
 		if(instanceof<Birb>(e.entity.get())) 
 			continue;
 
-		e.entity->setColor({20, 20, 20});
+		e.entity->setColor({80, 80, 80});
 		// If it's outside the radius, ignore it
 		if(e.local_position.length() > this->detection_radius) 
 			continue;

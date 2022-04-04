@@ -17,6 +17,12 @@ class SeekBehaviour : public SteeringBehaviour {
 		Vector2D calculate() override;
 };
 
+class ArriveBehaviour : public SteeringBehaviour {
+	public:
+		ArriveBehaviour(MovingEntity& me);
+		Vector2D calculate() override;
+};
+
 class ObstacleAvoidanceBehaviour : public SteeringBehaviour {
 	private:
 		double detection_radius;

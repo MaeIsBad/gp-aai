@@ -19,7 +19,9 @@ MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m,
 double MovingEntity::getAngle() {
 	Vector2D angle = this->velocity.normalize();
 	double h = asin(angle.y) + M_PI / 2;
-	if(angle.x < 0) h = 2 * M_PI - h;
+	if(angle.x < 0) 
+		h = 2 * M_PI - h;
+	
 	return h;
 }
 
@@ -80,9 +82,9 @@ Vector2D MovingEntity::toLocalSpace(Vector2D v) {
 
 Vector2D MovingEntity::toWorldSpace(Vector2D v) {
 	double a = this->getAngle();
-	Vector2D new_pos = v - this->position;
-	return new_pos.rotate(-a);
+	Vector2D new_pos = v.rotate(-1) + this->position;
+	return new_pos;
 }
 
 
-Birb::Birb(Vector2D p, World& w) : MovingEntity("BIRB", p, w, Vector2D(), 50, 2, *new ObstacleAvoidanceBehaviour(*this, 100)) {}
+Birb::Birb(Vector2D p, World& w) : MovingEntity("BIRB", p, w, Vector2D(), 20, 2, *new ObstacleAvoidanceBehaviour(*this, 50)) {}
