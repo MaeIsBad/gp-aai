@@ -28,7 +28,6 @@ class CompositeGoal : public Goal {
 	protected:
 		CompositeGoal();
 		vector<Goal*> subgoals;
-		//vector<Goal*> domgoals;
 
 	public:
 		void Activate();

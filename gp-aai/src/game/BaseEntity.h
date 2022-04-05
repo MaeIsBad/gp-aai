@@ -40,7 +40,7 @@ class BaseEntity {
 
         void setPosition(int x, int y);
         void setPosition(const Vector2D pos);
-        Vector2D getPosition();
+        Vector2D& getPosition();
 
         void setColor(Color c);
         World& getWorld();

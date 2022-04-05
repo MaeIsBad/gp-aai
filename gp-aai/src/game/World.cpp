@@ -78,7 +78,7 @@ void World::event(WorldEvent e, Vector2D pos) {
     this->seek_pos.setPosition(pos);
 }
 
-Vector2D World::getSeekPosition() {
+Vector2D& World::getSeekPosition() {
     return this->seek_pos.getPosition();
 }
 

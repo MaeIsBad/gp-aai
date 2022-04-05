@@ -12,14 +12,20 @@ class SteeringBehaviour {
 };
 
 class SeekBehaviour : public SteeringBehaviour {
+	private:
+		Vector2D& seek_pos;
+
 	public:
-		SeekBehaviour(MovingEntity& me);
+		SeekBehaviour(MovingEntity& me, Vector2D& seek_pos);
 		Vector2D calculate() override;
 };
 
 class ArriveBehaviour : public SteeringBehaviour {
+	private:
+		Vector2D& seek_pos;
+
 	public:
-		ArriveBehaviour(MovingEntity& me);
+		ArriveBehaviour(MovingEntity& me, Vector2D& seek_pos);
 		Vector2D calculate() override;
 };
 

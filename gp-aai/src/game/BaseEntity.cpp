@@ -50,8 +50,8 @@ void BaseEntity::setPosition(const Vector2D pos) {
 	return setPosition(pos.x, pos.y);
 }
 
-Vector2D BaseEntity::getPosition() {
-	return Vector2D(this->position);
+Vector2D& BaseEntity::getPosition() {
+	return this->position;
 }
 
 void BaseEntity::setColor(Color c) {

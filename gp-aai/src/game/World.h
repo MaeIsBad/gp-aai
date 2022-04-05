@@ -23,7 +23,7 @@ class World {
         void render(SDL_Renderer* renderer);
         void event(WorldEvent e, Vector2D pos);
 
-        Vector2D getSeekPosition();
+        Vector2D& getSeekPosition();
         const vector<shared_ptr<BaseEntity>> getEntities();
 
 };

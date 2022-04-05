@@ -13,20 +13,19 @@ Vector2D SteeringBehaviour::calculate() {
 	return Vector2D();
 }
 
-SeekBehaviour::SeekBehaviour(MovingEntity& me) : SteeringBehaviour(me) {}
+SeekBehaviour::SeekBehaviour(MovingEntity& me, Vector2D& seek_pos) : SteeringBehaviour(me), seek_pos(seek_pos) {}
 Vector2D SeekBehaviour::calculate() {
 	Vector2D pos = entity.getPosition();
-	Vector2D goal = entity.getWorld().getSeekPosition();
-	Vector2D force = (goal - pos);
+	Vector2D force = (this->seek_pos - pos);
 
 	return force - entity.getVelocity();
 }
 
-ArriveBehaviour::ArriveBehaviour(MovingEntity& me) : SteeringBehaviour(me) {}
+ArriveBehaviour::ArriveBehaviour(MovingEntity& me, Vector2D& seek_pos) : SteeringBehaviour(me), seek_pos(seek_pos) {}
 Vector2D ArriveBehaviour::calculate() {
 	Vector2D pos = entity.getPosition();
-	Vector2D goal = entity.getWorld().getSeekPosition();
-	Vector2D force = 1 / (goal - pos) * 10;
+	double length = (this->seek_pos - pos).length();
+	Vector2D force = (this->seek_pos - pos) * (1 - length / 200) * -1;
 
 	return force - entity.getVelocity();
 }

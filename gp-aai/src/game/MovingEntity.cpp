@@ -6,9 +6,8 @@
 
 using std::cout, std::endl, std::string;
 
-MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms, SteeringBehaviour& sb) : BaseEntity(n, p, w), velocity(v), mass(m), maxSpeed(ms), sb(sb) {
+MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms) : BaseEntity(n, p, w), velocity(v), mass(m), maxSpeed(ms) {
 	this->shapes.pop_back();
-
 
 	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
 	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
@@ -43,11 +42,13 @@ void MovingEntity::updateLines() {
 }
 
 void MovingEntity::update(float delta) {
-	Vector2D force = Vector2D(velocity);
+	Vector2D force = Vector2D();
 
-	SeekBehaviour ssb = SeekBehaviour(*this);
+	for(auto sb: this->sbs) {
+		force = force + sb->calculate();
+	}
 
-	force = force + (this->sb.calculate() + ssb.calculate()) / this->mass * delta;
+	force = this->velocity + force / this->mass * delta;
 	force = force.truncate(this->getMaxSpeed());
 	this->position = this->position + force;
 	this->velocity = force;
@@ -87,4 +88,8 @@ Vector2D MovingEntity::toWorldSpace(Vector2D v) {
 }
 
 
-Birb::Birb(Vector2D p, World& w) : MovingEntity("BIRB", p, w, Vector2D(), 20, 2, *new ObstacleAvoidanceBehaviour(*this, 50)) {}
+Birb::Birb(Vector2D p, World& w) : MovingEntity("BIRB", p, w, Vector2D(), 20, 2) {
+	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
+	this->sbs.push_back(new SeekBehaviour(*this, this->world.getSeekPosition()));
+	this->sbs.push_back(new ArriveBehaviour(*this, this->world.getSeekPosition()));
+}

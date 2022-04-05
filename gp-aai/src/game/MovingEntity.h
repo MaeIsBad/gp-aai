@@ -3,6 +3,7 @@
 #include "../util/Vector2D.h"
 #include "BaseEntity.h"
 #include "SteeringBehaviour.h"
+#include "GoalDrivenBehaviour.h"
 
 class MovingEntity : public BaseEntity {
 	protected:
@@ -10,12 +11,14 @@ class MovingEntity : public BaseEntity {
 		double mass;
 		double maxSpeed;
 
-		SteeringBehaviour& sb;
+		vector<SteeringBehaviour*> sbs;
 		void updateLines();
 		double getAngle();
 
+		Goal* goal;
+
 	public:
-		MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms, SteeringBehaviour& sb);
+		MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms);
 		void update(float delta) override;
 
 		double getMaxSpeed();
