@@ -18,8 +18,8 @@ CompositeGoal::~CompositeGoal() {
 }
 
 void CompositeGoal::Activate() {
-	for(auto goal: this->subgoals) {
-		goal->Activate();
+	if(this->subgoals.size() > 0) {
+		this->subgoals.back()->Activate();
 	}
 }
 
@@ -27,8 +27,15 @@ int CompositeGoal::Process() {
 	auto goal = this->subgoals.back();
 	auto result = goal->Process();
 
-	if(result > 0)
+	if(result > 0) {
+		goal->Terminate();
+		delete goal;
 		this->subgoals.pop_back();
+
+		if(this->subgoals.size() > 0) {
+			this->subgoals.back()->Activate();
+		}
+	}
 
 	if(this->subgoals.size() == 0) {
 		// We're empty, commit sudoku
@@ -39,8 +46,8 @@ int CompositeGoal::Process() {
 }
 
 void CompositeGoal::Terminate() {
-	for(auto goal: this->subgoals) {
-		goal->Terminate();
+	if(this->subgoals.size() > 0) {
+		this->subgoals.back()->Terminate();
 	}
 }
 
@@ -69,4 +76,13 @@ void SeekGoal::Terminate() {
 	this->entity.clearSteeringBehaviours();
 }
 
+/************* WalkSquareGoal *************/
+
+WalkSquareGoal::WalkSquareGoal(MovingEntity& entity) {
+	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, -100)));
+	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, 100)));
+	this->AddSubGoal(new SeekGoal(entity, Vector2D(100, 100)));
+	this->AddSubGoal(new SeekGoal(entity, Vector2D(100, -100)));
+	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, -100)));
+}
 

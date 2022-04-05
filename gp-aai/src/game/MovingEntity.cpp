@@ -127,5 +127,5 @@ void MovingEntity::clearSteeringBehaviours() {
 
 Birb::Birb(Vector2D p, World& w) : MovingEntity("BIRB", p, w, Vector2D(), 20, 2) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
-	this->setGoal(new SeekGoal(*this, Vector2D(100, 100)));
+	this->setGoal(new WalkSquareGoal(*this));
 }

@@ -32,12 +32,12 @@ class CompositeGoal : public Goal {
 		~CompositeGoal();
 		vector<Goal*> subgoals;
 
+		void AddSubGoal(Goal* g);
+
 	public:
 		void Activate();
 		int Process();
 		void Terminate();
-
-		void AddSubGoal(Goal* g);
 };
 
 class SeekGoal : public AtomicGoal {
@@ -49,6 +49,11 @@ class SeekGoal : public AtomicGoal {
 		void Activate();
 		int Process();
 		void Terminate();
+};
+
+class WalkSquareGoal : public CompositeGoal {
+	public:
+		WalkSquareGoal(MovingEntity& entity);
 };
 
 #include "MovingEntity.h"
