@@ -4,7 +4,7 @@
 #include "FuzzyVariable.h"
 #include "FuzzyRule.h"
 
-
+using std::vector;
 
 
 class FuzzySet
@@ -12,7 +12,7 @@ class FuzzySet
 private:
 
 public:
-	Vector<FuzzyVariable*> Variables;
+	vector<FuzzyVariable*> Variables;
 
 	//standaard constructor + destructor
 	FuzzySet();
@@ -20,6 +20,6 @@ public:
 
 	// functies
 	void Add(FuzzyVariable* a);
-	vecotr<double> Fuzzify(double x);
+	vector<double> Fuzzify(double x);
 	vector<double> DeFuzzify(double y);
 };

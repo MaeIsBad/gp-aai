@@ -5,7 +5,7 @@
 #include "FuzzyRule.h"
 
 
-
+using std::vector;
 
 class FuzzyRuleSet
 {
@@ -13,7 +13,7 @@ private:
 	
 
 public:
-	Vector<FuzzyRule*> Rules;
+	vector<FuzzyRule*> Rules;
 
 	//standaard constructor + destructor
 	FuzzyRuleSet();

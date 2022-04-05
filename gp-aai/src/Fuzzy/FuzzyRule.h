@@ -24,4 +24,4 @@ public:
 	double Calculate(double a, double b);
 };
 
-FuzzyRule operator AND(const FuzzyRule r1, constFuzzyRule r2);
+FuzzyRule operator AND(const FuzzyRule r1, const FuzzyRule r2);
