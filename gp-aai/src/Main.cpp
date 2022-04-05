@@ -59,6 +59,7 @@ int main(int argc, char* argv[])  {
     // Run tests first
     run_Vector2D_tests();
 
+    /*
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
     bool running = true;
 
@@ -69,6 +70,6 @@ int main(int argc, char* argv[])  {
     // Wait for display thread to finish
     display_thread.join();
     running = false;
-    logic_thread.join();
+    logic_thread.join();*/
     return 0;
 }
