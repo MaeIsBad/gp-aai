@@ -1,6 +1,6 @@
 #include <iostream>
 #include "FuzzyRule.h"
-#include "FuzzyVariable"
+#include "FuzzyVariable.h"
 #include "FuzzyRuleSet.h"
 
 
