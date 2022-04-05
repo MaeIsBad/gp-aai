@@ -72,9 +72,7 @@ void World::render(SDL_Renderer* renderer){
 }
 
 void World::event(WorldEvent e, Vector2D pos) {
-    cout << "Click at " << pos << endl;
     pos = pos * this->transform - (this->transform * this->translate);
-    cout << "Click at " << pos << endl;
     this->seek_pos.setPosition(pos);
 }
 

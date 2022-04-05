@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../util/Vector2D.h"
+class MovingEntity;
 
 using std::vector;
 
@@ -16,7 +17,8 @@ class Goal {
 
 class AtomicGoal : public Goal {
 	protected:
-		AtomicGoal();
+		MovingEntity& entity;
+		AtomicGoal(MovingEntity& entity);
 
 	public:
 		virtual void Activate() = 0;
@@ -27,6 +29,7 @@ class AtomicGoal : public Goal {
 class CompositeGoal : public Goal {
 	protected:
 		CompositeGoal();
+		~CompositeGoal();
 		vector<Goal*> subgoals;
 
 	public:
@@ -42,9 +45,10 @@ class SeekGoal : public AtomicGoal {
 		Vector2D seek_pos;
 
 	public:
-		SeekGoal(Vector2D seek_pos);
+		SeekGoal(MovingEntity& entity, Vector2D seek_pos);
 		void Activate();
 		int Process();
 		void Terminate();
 };
 
+#include "MovingEntity.h"

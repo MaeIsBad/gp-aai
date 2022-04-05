@@ -6,13 +6,21 @@
 
 using std::cout, std::endl, std::string;
 
-MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms) : BaseEntity(n, p, w), velocity(v), mass(m), maxSpeed(ms) {
+MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms) : BaseEntity(n, p, w), velocity(v), mass(m), maxSpeed(ms), goal(nullptr) {
 	this->shapes.pop_back();
 
 	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
 	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
 	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
 	this->updateLines();
+}
+
+MovingEntity::~MovingEntity() {
+	this->clearSteeringBehaviours();
+	for(auto shape : this->shapes) {
+		delete shape;
+	}
+	this->shapes.clear();
 }
 
 double MovingEntity::getAngle() {
@@ -42,6 +50,17 @@ void MovingEntity::updateLines() {
 }
 
 void MovingEntity::update(float delta) {
+	// Update tick for goals
+	if(this->goal != nullptr) {
+		auto result = this->goal->Process();
+
+		if(result > 0) {
+			delete this->goal;
+			this->goal = nullptr;
+		}
+	}
+
+	// Update tick for steering
 	Vector2D force = Vector2D();
 
 	for(auto sb: this->sbs) {
@@ -49,7 +68,7 @@ void MovingEntity::update(float delta) {
 	}
 
 	force = this->velocity + force / this->mass * delta;
-	force = force.truncate(this->getMaxSpeed());
+	force = force.truncate(this->getMaxSpeed()) * 0.9;
 	this->position = this->position + force;
 	this->velocity = force;
 	this->updateLines();
@@ -83,13 +102,30 @@ Vector2D MovingEntity::toLocalSpace(Vector2D v) {
 
 Vector2D MovingEntity::toWorldSpace(Vector2D v) {
 	double a = this->getAngle();
-	Vector2D new_pos = v.rotate(-1) + this->position;
+	Vector2D new_pos = v.rotate(-a) + this->position;
 	return new_pos;
+}
+
+void MovingEntity::setGoal(Goal* goal) {
+	if(this->goal != nullptr) {
+		this->goal->Terminate();
+		delete this->goal;
+	}
+	this->goal = goal;
+	goal->Activate();
+}
+void MovingEntity::pushSteeringBehaviour(SteeringBehaviour* sb) {
+	this->sbs.push_back(sb);
+}
+void MovingEntity::clearSteeringBehaviours() {
+	for(auto sb : this->sbs) {
+		delete sb;
+	}
+	this->sbs.clear();
 }
 
 
 Birb::Birb(Vector2D p, World& w) : MovingEntity("BIRB", p, w, Vector2D(), 20, 2) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
-	this->sbs.push_back(new SeekBehaviour(*this, this->world.getSeekPosition()));
-	this->sbs.push_back(new ArriveBehaviour(*this, this->world.getSeekPosition()));
+	this->setGoal(new SeekGoal(*this, Vector2D(100, 100)));
 }

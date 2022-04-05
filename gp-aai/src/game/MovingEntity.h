@@ -19,6 +19,7 @@ class MovingEntity : public BaseEntity {
 
 	public:
 		MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms);
+		~MovingEntity();
 		void update(float delta) override;
 
 		double getMaxSpeed();
@@ -27,6 +28,11 @@ class MovingEntity : public BaseEntity {
 		const vector<LocalizedEntity> getLocalEntities() override;
 		Vector2D toLocalSpace(Vector2D v);
 		Vector2D toWorldSpace(Vector2D v);
+
+		void setGoal(Goal* goal);
+
+		void pushSteeringBehaviour(SteeringBehaviour* sb);
+		void clearSteeringBehaviours();
 };
 
 class Birb : public MovingEntity {
