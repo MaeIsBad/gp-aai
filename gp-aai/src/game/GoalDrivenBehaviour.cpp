@@ -76,9 +76,9 @@ void SeekGoal::Terminate() {
 	this->entity.clearSteeringBehaviours();
 }
 
-/************* WalkSquareGoal *************/
+/************* PatrolGoal *************/
 
-WalkSquareGoal::WalkSquareGoal(MovingEntity& entity) {
+PatrolGoal::PatrolGoal(MovingEntity& entity) {
 	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, -100)));
 	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, 100)));
 	this->AddSubGoal(new SeekGoal(entity, Vector2D(100, 100)));

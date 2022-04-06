@@ -51,9 +51,9 @@ class SeekGoal : public AtomicGoal {
 		void Terminate();
 };
 
-class WalkSquareGoal : public CompositeGoal {
+class PatrolGoal : public CompositeGoal {
 	public:
-		WalkSquareGoal(MovingEntity& entity);
+		PatrolGoal(MovingEntity& entity);
 };
 
 #include "MovingEntity.h"
