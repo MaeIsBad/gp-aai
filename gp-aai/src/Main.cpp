@@ -1,12 +1,29 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
 #include "game/World.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <string>
 #include "tests/Vector2DTests.hpp"
+#ifdef _WIN32
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#define path(x) x
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#define path(x) ("gp-aai/" + x)
+#endif
 
-using std::thread, std::cout, std::endl;
+using std::thread, std::cout, std::endl, std::string;
+
+string get_current_dir() {
+    char buff[FILENAME_MAX]; //create string buffer to hold path
+    GetCurrentDir(buff, FILENAME_MAX);
+    string current_working_dir(buff);
+    return current_working_dir;
+}
 
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
@@ -25,7 +42,7 @@ void display_loop(World* world) {
         SDL_Texture* Background_Tx;
 
         //this opens a font style and sets a size
-        TTF_Font* Sans = TTF_OpenFont("gp-aai/Arial.ttf", 24);
+        TTF_Font* Sans = TTF_OpenFont(path("Arial.ttf"), 24);
 
         // this is the color in rgb format,
         // maxing out all would give you the color white,
@@ -35,7 +52,7 @@ void display_loop(World* world) {
         if (SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer) == 0) {
             SDL_bool done = SDL_FALSE;
 
-            Loading_Surf = SDL_LoadBMP("gp-aai/Set_A_Hills1.bmp");
+            Loading_Surf = SDL_LoadBMP(path("Set_A_Hills1.bmp"));
             Background_Tx = SDL_CreateTextureFromSurface(renderer, Loading_Surf);
             SDL_FreeSurface(Loading_Surf); 
 
@@ -117,6 +134,8 @@ void logic_loop(World* world, bool* running) {
 }
 
 int main(int argc, char* argv[])  {
+    cout << get_current_dir() << endl;
+
     // Run tests first
     run_Vector2D_tests();
 
