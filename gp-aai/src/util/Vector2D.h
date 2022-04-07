@@ -15,6 +15,7 @@ public:
     ~Vector2D();
 
     double length();
+    double manhattanLength();
     Vector2D normalize();
     Vector2D truncate(double max);
     Vector2D rotate(double a);
