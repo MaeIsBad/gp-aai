@@ -13,7 +13,7 @@
 #else
 #include <unistd.h>
 #define GetCurrentDir getcwd
-#define path(x) ("gp-aai/" + x)
+#define path(x) "gp-aai/" x
 #endif
 
 using std::thread, std::cout, std::endl, std::string;
