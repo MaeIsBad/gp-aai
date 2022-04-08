@@ -4,13 +4,14 @@
 #include "FuzzyVariable.h"
 #include "FuzzyRuleSet.h"
 #include "FuzzySet.h"
-
+#include "../util/VectorMath.hpp"
 
 /*****************************************************/
 // standaard constructor + destructor
-FuzzySet::FuzzySet()
+FuzzySet::FuzzySet(double maxWidth)
 {
 	//FuzzyVariable = nullptr;
+	this->maxWidth = maxWidth;
 }
 
 FuzzySet::~FuzzySet()
@@ -22,22 +23,31 @@ FuzzySet::~FuzzySet()
 
 /*****************************************************/
 // functies
-void FuzzySet::Add(FuzzyVariable* a)
+void FuzzySet::Add(FuzzyVariable* a, double value)
 {
-	//FuzzyVariable::startA = FuzzyVariable::startA + a.startA;
-	//FuzzyVariable::startB = FuzzyVariable::startB + a.startB;
+	std::pair<bool, int> result = findInVector<FuzzyVariable*>(this->Variables, a);
 
-	//FuzzyVariable::endA = FuzzyVariable::endA + a.endA;
-	//FuzzyVariable::endB = FuzzyVariable::endB + a.endB;
+	if (result.first) {
+		if (value > this->MaxValues[result.second]) {
+			this->MaxValues[result.second] = value;
+		}
+	}
+	else {
+		this->Variables.push_back(a);
+		this->MaxValues.push_back(value);
+	}
+
 }
 
-vector<double> FuzzySet::Fuzzify(double x)
-{	
-	return vector<double>{0.0};
-}
-
-vector<double> FuzzySet::DeFuzzify(double y)
+double FuzzySet::getMaxAV()
 {
-	return vector<double>{0.0};
+	// get centers
+	double numerator = 0, denumerator = 0;
+	for (int i = 0; i < this->Variables.size(); i++) {
+		double center = this->Variables[i]->getCenter(this->maxWidth);
+		
+		numerator += center * this->MaxValues[i];
+		denumerator += this->MaxValues[i];
+	}
+	return numerator / denumerator;
 }
-

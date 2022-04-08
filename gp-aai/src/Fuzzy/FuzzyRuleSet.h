@@ -1,24 +1,30 @@
 #pragma once
-
 #include <vector>
-#include "FuzzyVariable.h"
 #include "FuzzyRule.h"
 
 
 using std::vector;
 
+struct rulesetResult{
+
+	double DOM;
+	FuzzyVariable* Concequent;
+	FuzzyVariable* Antecedent1;
+	FuzzyVariable* Antecedent2;
+};
+
 class FuzzyRuleSet
 {
 private:
-	
-
-public:
 	vector<FuzzyRule*> Rules;
 
+public:
 	//standaard constructor + destructor
 	FuzzyRuleSet();
 	~FuzzyRuleSet();
 
+	void addFuzzyRule(FuzzyRule* fuzzyRule);
+
 	// functies
-	double Calculate(double a, double b);
+	vector<rulesetResult> Calculate(double a, double b);
 };

@@ -6,20 +6,20 @@
 
 using std::vector;
 
-
 class FuzzySet
 {
 private:
+	double maxWidth;
 
 public:
 	vector<FuzzyVariable*> Variables;
+	vector<double> MaxValues;
 
 	//standaard constructor + destructor
-	FuzzySet();
+	FuzzySet(double maxWidth);
 	~FuzzySet();
 
 	// functies
-	void Add(FuzzyVariable* a);
-	vector<double> Fuzzify(double x);
-	vector<double> DeFuzzify(double y);
+	void Add(FuzzyVariable* a, double value);
+	double getMaxAV();
 };

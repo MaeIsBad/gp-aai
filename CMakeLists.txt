@@ -7,3 +7,4 @@ project ("gp-aai")
 
 # Include sub-projects.
 add_subdirectory ("gp-aai")
+ 
