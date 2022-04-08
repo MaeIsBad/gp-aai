@@ -7,6 +7,7 @@
 #include <string>
 #include "tests/Vector2DTests.hpp"
 #include "tests/AstarTests.hpp"
+#include "tests/FuzzyTests.hpp"
 #ifdef _WIN32
 #include <direct.h>
 #define GetCurrentDir _getcwd
@@ -144,6 +145,7 @@ int main(int argc, char* argv[])  {
 
     // Run tests first
     run_Vector2D_tests();
+    run_Fuzzy_tests();
     //run_Astar_tests();
     //return 0;
 
