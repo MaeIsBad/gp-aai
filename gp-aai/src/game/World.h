@@ -26,5 +26,6 @@ class World {
         Vector2D& getSeekPosition();
         const vector<shared_ptr<BaseEntity>> getEntities();
 
+        void generateGraph();
 };
 

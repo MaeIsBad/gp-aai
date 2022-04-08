@@ -1,5 +1,6 @@
 #include "../util/Shapes.h"
 #include "../util/VectorMath.hpp"
+#include "Astar.h"
 #include "BaseEntity.h"
 #include "MovingEntity.h"
 #include "World.h"
@@ -9,6 +10,8 @@
 #include <vector>
 
 #include <csignal>
+
+#define WORLD_GRAPH_DENSITY 100
 
 #define breakpoint std::raise(SIGINT)
 using std::cout, std::endl, std::shared_ptr;
@@ -29,15 +32,15 @@ World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Ve
     //    this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree", Vector2D(dist6(rng), dist6(rng)), *this)));
     //}
 
-    //for(int i=0; i<800/20; i++) {
-    //    for(int o=0; o<800/10; o++) {
-    //        this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree", Vector2D(o*10, 100), *this)));
-    //    }
-    //}
-    this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 1", Vector2D(-100, -100), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 2", Vector2D(100, 100), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 3", Vector2D(-100, 100), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 4", Vector2D(100, -100), *this)));
+    for(int i=-this->width/2; i<this->width/2; i+=WORLD_GRAPH_DENSITY) {
+        for(int o=-this->height/2; o<this->height/2; o+=WORLD_GRAPH_DENSITY) {
+            this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree", Vector2D(i, o), *this)));
+        }
+    }
+    //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 1", Vector2D(-100, -100), *this)));
+    //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 2", Vector2D(100, 100), *this)));
+    //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 3", Vector2D(-100, 100), *this)));
+    //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 4", Vector2D(100, -100), *this)));
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 5", Vector2D(220, 100), *this)));
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 6", Vector2D(230, 100), *this)));
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 7", Vector2D(240, 100), *this)));
@@ -47,6 +50,8 @@ World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Ve
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 11", Vector2D(180, 100), *this)));
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 12", Vector2D(170, 100), *this)));
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 13", Vector2D(70, 60), *this)));
+
+    this->generateGraph();
 
 }
 
@@ -82,4 +87,35 @@ Vector2D& World::getSeekPosition() {
 
 const vector<shared_ptr<BaseEntity>> World::getEntities() {
     return this->entities;
+}
+
+void World::generateGraph() {
+    Graph* graph = new Graph();
+
+    for(int x=0; x<this->width; x+=WORLD_GRAPH_DENSITY) {
+        for(int y=0; y<this->height; y+=WORLD_GRAPH_DENSITY) {
+            Vertex* v = new Vertex(Vector2D(x, y), 0);
+            graph->addVertex(v);
+
+            if(x >= WORLD_GRAPH_DENSITY) {
+                Vertex* vp = graph->findClosest(Vector2D(x - WORLD_GRAPH_DENSITY, y));
+                v->addEdge(Edge { *vp, WORLD_GRAPH_DENSITY });
+                vp->addEdge(Edge { *v, WORLD_GRAPH_DENSITY });
+            }
+
+            if(y >= WORLD_GRAPH_DENSITY) {
+                Vertex* vp = graph->findClosest(Vector2D(x, y - WORLD_GRAPH_DENSITY));
+                v->addEdge(Edge { *vp, WORLD_GRAPH_DENSITY });
+                vp->addEdge(Edge { *v, WORLD_GRAPH_DENSITY });
+            }
+        }
+    }
+
+    Vertex* end = graph->findClosest(Vector2D(300, 100));
+    Vertex* start = graph->findClosest(Vector2D(-300, -200));
+
+    auto result = graph->shortestPath(start, end);
+    for(auto vertex : result) {
+        cout << "Vertex with position " << vertex->getPosition() << endl;
+    }
 }

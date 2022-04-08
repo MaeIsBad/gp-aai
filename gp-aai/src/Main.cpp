@@ -62,11 +62,16 @@ void display_loop(World* world) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
                 SDL_RenderClear(renderer);
                     
-                for(int i=0; i<16; i++) {
-                    for(int o=0; o<16; o++) {
-                        drawTile(renderer, Background_Tx, i, o, i, o);
-                    }
-                }
+                //for(int i=0; i<16; i++) {
+                //    for(int o=0; o<16; o++) {
+                drawTile(renderer, Background_Tx, 0, 0, 0, 0);
+                drawTile(renderer, Background_Tx, 0, 0, 0, 1);
+                drawTile(renderer, Background_Tx, 0, 0, 0, 2);
+                drawTile(renderer, Background_Tx, 0, 0, 0, 3);
+                drawTile(renderer, Background_Tx, 0, 0, 0, 4);
+
+                //    }
+                //}
 
 
                 // as TTF_RenderText_Solid could only be used on
@@ -81,7 +86,7 @@ void display_loop(World* world) {
                 Message_rect.x = 500;  //controls the rect's x coordinate 
                 Message_rect.y = 500; // controls the rect's y coordinte
                 Message_rect.w = 100; // controls the width of the rect
-                Message_rect.h = 100; // controls the height of the rect
+                Message_rect.h = 30; // controls the height of the rect
 
                 // (0,0) is on the top left of the window/screen,
                 // think a rect as the text's box,
@@ -139,8 +144,8 @@ int main(int argc, char* argv[])  {
 
     // Run tests first
     run_Vector2D_tests();
-    run_Astar_tests();
-    return 0;
+    //run_Astar_tests();
+    //return 0;
 
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
     bool running = true;
