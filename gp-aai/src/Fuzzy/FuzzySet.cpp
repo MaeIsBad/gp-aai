@@ -32,14 +32,12 @@ void FuzzySet::Add(FuzzyVariable* a)
 }
 
 vector<double> FuzzySet::Fuzzify(double x)
-{
-
-	return this;
+{	
+	return 0.0;
 }
 
 vector<double> FuzzySet::DeFuzzify(double y)
 {
-
-	return this;
+	return 0.0;
 }
 

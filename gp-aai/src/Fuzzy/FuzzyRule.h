@@ -3,7 +3,7 @@
 #include "FuzzyVariable.h"
 
 
-
+enum class FuzzyOperator { AND, OR };
 
 class FuzzyRule
 {
@@ -12,16 +12,15 @@ private:
 	FuzzyVariable Antecedent2;
 	FuzzyVariable Concequent;
 
-	enum Operator(AND, OR);
+	FuzzyOperator Operator;
 
 public:
 
 	//standaard constructor + destructor
-	FuzzyRule();
+	FuzzyRule(FuzzyVariable Antecedent1, FuzzyVariable Antecedent2 , FuzzyVariable Concequent , FuzzyOperator o);
 	~FuzzyRule();
 
 	// functies
 	double Calculate(double a, double b);
 };
 
-FuzzyRule operator AND(const FuzzyRule r1, const FuzzyRule r2);

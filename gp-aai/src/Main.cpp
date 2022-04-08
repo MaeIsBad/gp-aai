@@ -4,6 +4,7 @@
 #include <thread>
 #include <chrono>
 #include "tests/Vector2DTests.hpp"
+#include "tests/FuzzyTests.hpp"
 
 using std::thread, std::cout, std::endl;
 
@@ -58,6 +59,7 @@ void logic_loop(World* world, bool* running) {
 int main(int argc, char* argv[])  {
     // Run tests first
     run_Vector2D_tests();
+    run_Fuzzy_tests();
 
     /*
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
