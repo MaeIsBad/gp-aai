@@ -21,7 +21,7 @@
 #define path(x) "gp-aai/" x
 #endif
 
-#define WORLD_GRAPH_DENSITY 30
+#define WORLD_GRAPH_DENSITY 10
 
 #define breakpoint std::raise(SIGINT)
 using std::cout, std::endl, std::shared_ptr;
@@ -147,7 +147,7 @@ vector<Vector2D> World::shortestPath(Vector2D start, Vector2D end) {
 
     for(int x=-this->width/2; x<=this->width/2; x+=WORLD_GRAPH_DENSITY) {
         for(int y=-this->height/2; y<=this->height/2; y+=WORLD_GRAPH_DENSITY) {
-            Vertex* v = new Vertex(Vector2D(x, y), (end - Vector2D(x, y)).length());
+            Vertex* v = new Vertex(Vector2D(x, y), (start - Vector2D(x, y)).length());
 
             if(x >= -this->width/2 + WORLD_GRAPH_DENSITY) {
                 Vertex* vp = graph->vertexAt(Vector2D(x - WORLD_GRAPH_DENSITY, y));
