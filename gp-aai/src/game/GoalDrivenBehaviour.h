@@ -51,6 +51,14 @@ class SeekGoal : public AtomicGoal {
 		void Terminate();
 };
 
+class FlockGoal : public AtomicGoal {
+	public:
+		FlockGoal(MovingEntity& entity);
+		void Activate();
+		int Process();
+		void Terminate();
+};
+
 class PatrolGoal : public CompositeGoal {
 	public:
 		PatrolGoal(MovingEntity& entity);

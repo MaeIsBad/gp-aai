@@ -18,7 +18,31 @@ using std::cout, std::endl, std::shared_ptr;
 
 World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Vector2D(0, 0), *this)) {
     this->entities.push_back(shared_ptr<BaseEntity>(&this->seek_pos));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Birb(Vector2D(0, 0), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Commander(Vector2D(0, 0), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(-10, -10), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(-10, 10), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(10, -10), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(11, 12), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(12, 12), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(13, 13), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(14, 12), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(15, 15), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(16, 25), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(17, 21), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(18, 24), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(24, 22), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(37, 43), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(30, 29), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(26, 28), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(31, 26), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(10, 25), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(31, 27), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(19, 22), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(24, 20), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(22, 29), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(37, 26), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(68, 47), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(Vector2D(27, 12), *this)));
 
 
     this->transform = *new Vector2D(1, -1);

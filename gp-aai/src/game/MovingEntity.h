@@ -35,7 +35,11 @@ class MovingEntity : public BaseEntity {
 		void clearSteeringBehaviours();
 };
 
-class Birb : public MovingEntity {
+class Soldier : public MovingEntity {
 	public:
-		Birb(Vector2D p, World& w);
+		Soldier(Vector2D p, World& w);
+};
+class Commander : public MovingEntity {
+	public:
+		Commander(Vector2D p, World& w);
 };

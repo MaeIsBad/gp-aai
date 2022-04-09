@@ -125,7 +125,11 @@ void MovingEntity::clearSteeringBehaviours() {
 }
 
 
-Birb::Birb(Vector2D p, World& w) : MovingEntity("BIRB", p, w, Vector2D(), 20, 2) {
+Soldier::Soldier(Vector2D p, World& w) : MovingEntity("Soldier", p, w, Vector2D(), 20, 2) {
+	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
+	this->setGoal(new FlockGoal(*this));
+}
+Commander::Commander(Vector2D p, World& w) : MovingEntity("Commander", p, w, Vector2D(), 20, 1.5) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
 	this->setGoal(new PatrolGoal(*this));
 }

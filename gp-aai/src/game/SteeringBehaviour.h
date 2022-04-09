@@ -42,10 +42,10 @@ class ObstacleAvoidanceBehaviour : public SteeringBehaviour {
 
 class FlockingBehaviour : public SteeringBehaviour {
 	private:
-		vector<MovingEntity*>& group;
+		double radius;
 
 	public:
-		FlockingBehaviour(MovingEntity& me, vector<MovingEntity*>& group);
+		FlockingBehaviour(MovingEntity& me, double radius);
 		Vector2D calculate() override;
 };
 
