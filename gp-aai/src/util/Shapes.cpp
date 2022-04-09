@@ -1,5 +1,6 @@
 #include "Shapes.h"
 #include <SDL.h>
+#include <cmath>
 
 using std::cout, std::endl, std::vector;
 
@@ -84,3 +85,17 @@ Circle& Circle::setSides(int s) {
     this->updateLines();
     return *this;
 }
+
+Sprite::Sprite(SDL_Texture** t, SDL_Rect s, Vector2D pos, double a) : Shape({0,0,0}), texture(t), SrcR(s), position(pos), angle(a) {}
+void Sprite::draw(Vector2D& transform, Vector2D& translate, SDL_Renderer* renderer) {
+    Vector2D new_pos = position * transform + (translate);
+    SDL_Rect DestR { new_pos.x, new_pos.y, SrcR.w, SrcR.h };
+    SDL_RenderCopyEx(renderer, *texture, &SrcR, &DestR, (double)(((int)(angle * 180.0 / M_PI) - 90) % 360), NULL, SDL_FLIP_NONE);
+}
+void Sprite::setPosition(Vector2D pos) {
+    this->position = pos;
+}
+void Sprite::setAngle(double a) {
+    this->angle = a;
+}
+

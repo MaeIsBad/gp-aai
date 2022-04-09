@@ -5,7 +5,7 @@
 
 using std::cout, std::endl, std::numeric_limits, std::reverse;
 
-Vertex::Vertex(Vector2D position, double heuristic) : position(position), heuristic(heuristic), distance(numeric_limits<double>::max() - 1000), visited(false), from(nullptr) {}
+Vertex::Vertex(Vector2D position, double heuristic) : position(position), heuristic(heuristic), distance(numeric_limits<double>::max() / 2), visited(false), from(nullptr) {}
 
 void Vertex::addEdge(Edge edge) {
 	this->edges.push_back(edge);
@@ -54,10 +54,23 @@ void Vertex::print() {
 	}
 }
 
-Graph::Graph() {}
+Graph::Graph() {
+	this->shapes = vector<Shape*>();
+}
+Graph::~Graph() {
+	for(auto vertex : this->vertices)
+		delete vertex;
+
+	for(auto shape : this->shapes) 
+		delete shape;
+}
 
 void Graph::addVertex(Vertex* vertex) {
 	this->vertices.push_back(vertex);
+}
+
+void Graph::addShape(Shape* shape) {
+	this->shapes.push_back(shape);
 }
 
 Vertex* Graph::findClosest(Vector2D pos) {
@@ -74,6 +87,14 @@ Vertex* Graph::findClosest(Vector2D pos) {
 	}
 
 	return closest;
+}
+Vertex* Graph::vertexAt(Vector2D pos) {
+	for(Vertex* v : this->vertices) {
+		if(pos.x == v->getPosition().x &&
+			pos.y == v->getPosition().y)
+			return v;
+	}
+	return nullptr;
 }
 
 vector<Vector2D> Graph::shortestPathPoints(Vector2D from, Vector2D to) {
@@ -98,6 +119,7 @@ vector<Vertex*> Graph::shortestPath(Vertex* from, Vertex* to) {
 		// 1. Expand outwards
 		for(auto edge : current_vertex->getNeighbours()) {
 			double distance = current_vertex->getDistance() + edge.weight;
+			this->shapes.push_back(new Line(current_vertex->getPosition(), edge.toVertex.getPosition(), {100, 200, 200}));
 			if(edge.toVertex.getDistance() > distance) {
 				edge.toVertex.setDistance(distance);
 				edge.toVertex.setFrom(current_vertex);
@@ -117,6 +139,7 @@ vector<Vertex*> Graph::shortestPath(Vertex* from, Vertex* to) {
 			}
 		}
 
+		//this->shapes.push_back(new Line(current_vertex->getPosition(), smallest->getPosition(), {100, 200, 200}));
 		current_vertex = smallest;
 	}
 
@@ -128,4 +151,8 @@ vector<Vertex*> Graph::shortestPath(Vertex* from, Vertex* to) {
 	shortest_path.push_back(from);
 	reverse(shortest_path.begin(), shortest_path.end());
 	return shortest_path;
+}
+
+const vector<Shape*> Graph::render() {
+	return this->shapes;
 }

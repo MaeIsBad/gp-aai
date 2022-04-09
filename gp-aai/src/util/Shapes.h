@@ -1,7 +1,8 @@
 #pragma once
+#include <SDL.h>
+#include <SDL_image.h>
 #include "Color.h"
 #include "Vector2D.h"
-#include <SDL.h>
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -51,4 +52,18 @@ class Circle : public Shape {
         Circle& setRadius(double r);
         Circle& setSides(int s);
         void setColor(Color co) override;
+};
+
+class Sprite : public Shape {
+    private:
+        SDL_Rect SrcR;
+        SDL_Texture** texture;
+        Vector2D position;
+        double angle;
+
+    public:
+        Sprite(SDL_Texture** t, SDL_Rect s, Vector2D pos, double angle);
+        void draw(Vector2D& transform, Vector2D& translate, SDL_Renderer* renderer) override;
+        void setPosition(Vector2D pos);
+        void setAngle(double a);
 };

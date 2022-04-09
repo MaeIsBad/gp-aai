@@ -64,4 +64,9 @@ class PatrolGoal : public CompositeGoal {
 		PatrolGoal(MovingEntity& entity);
 };
 
+class FollowPathGoal : public CompositeGoal {
+	public:
+		FollowPathGoal(MovingEntity& entity, vector<Vector2D> points);
+};
+
 #include "MovingEntity.h"

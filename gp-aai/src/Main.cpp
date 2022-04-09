@@ -1,10 +1,12 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <SDL_image.h>
 #include "game/World.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <string>
+#include <random>
 #include "tests/Vector2DTests.hpp"
 #include "tests/AstarTests.hpp"
 #include "tests/FuzzyTests.hpp"
@@ -31,8 +33,8 @@ string get_current_dir() {
 #define WINDOW_WIDTH 800
 
 void drawTile(SDL_Renderer* renderer, SDL_Texture* texture, int u, int v, int x, int y) {
-    SDL_Rect SrcR { 16 * u, 16 * v, 16, 16 };
-    SDL_Rect DestR { 32 * x, 32 * y, 32, 32 };
+    SDL_Rect SrcR { 8 * u, 8 * v, 8, 8 };
+    SDL_Rect DestR { 16 * x, 16 * y, 16, 16 };
     SDL_RenderCopy(renderer, texture, &SrcR, &DestR);
 }
 
@@ -51,10 +53,19 @@ void display_loop(World* world) {
         // and it will be your text's color
         SDL_Color White = {255, 255, 255};
 
+        std::random_device dev;
+        std::mt19937 rng(dev());
+        std::uniform_int_distribution<std::mt19937::result_type> dist6(0,100);
+
+        int arr[WINDOW_WIDTH/16 * (WINDOW_HEIGHT*16+1)];
+        for(int i=0; i<WINDOW_WIDTH/16 * (WINDOW_HEIGHT*16+1); i++) {
+            arr[i] = dist6(rng);
+        }
+
         if (SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer) == 0) {
             SDL_bool done = SDL_FALSE;
 
-            Loading_Surf = SDL_LoadBMP(path("Set_A_Hills1.bmp"));
+            Loading_Surf = IMG_Load(path("background.bmp"));
             Background_Tx = SDL_CreateTextureFromSurface(renderer, Loading_Surf);
             SDL_FreeSurface(Loading_Surf); 
 
@@ -63,17 +74,37 @@ void display_loop(World* world) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
                 SDL_RenderClear(renderer);
                     
-                //for(int i=0; i<16; i++) {
-                //    for(int o=0; o<16; o++) {
-                drawTile(renderer, Background_Tx, 0, 0, 0, 0);
-                drawTile(renderer, Background_Tx, 0, 0, 0, 1);
-                drawTile(renderer, Background_Tx, 0, 0, 0, 2);
-                drawTile(renderer, Background_Tx, 0, 0, 0, 3);
-                drawTile(renderer, Background_Tx, 0, 0, 0, 4);
+                for(int i=0; i<WINDOW_WIDTH/16; i++) {
+                    for(int o=0; o<WINDOW_HEIGHT/16+1; o++) {
 
-                //    }
-                //}
+                        switch(arr[o*WINDOW_HEIGHT/16+i]) {
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                                drawTile(renderer, Background_Tx, 6, 4, i, o);
+                                break;
+                            case 7:
+                            case 8:
+                            case 9:
+                                drawTile(renderer, Background_Tx, 6, 3, i, o);
+                                break;
+                            case 10:
+                            case 11:
+                            case 12:
+                                drawTile(renderer, Background_Tx, 6, 5, i, o);
+                                break;
+                            case 13:
+                                drawTile(renderer, Background_Tx, 4, 3, i, o);
+                                break;
+                            default:
+                                drawTile(renderer, Background_Tx, 0, 0, i, o);
 
+                        }
+                    }
+                }
 
                 // as TTF_RenderText_Solid could only be used on
                 // SDL_Surface then you have to create the surface first
@@ -148,6 +179,7 @@ int main(int argc, char* argv[])  {
     run_Fuzzy_tests();
     run_Astar_tests();
     //return 0;
+
 
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
     bool running = true;

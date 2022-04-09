@@ -9,10 +9,6 @@ using std::cout, std::endl, std::string;
 MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms) : BaseEntity(n, p, w), velocity(v), mass(m), maxSpeed(ms), goal(nullptr) {
 	this->shapes.pop_back();
 
-	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
-	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
-	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
-	this->updateLines();
 }
 
 MovingEntity::~MovingEntity() {
@@ -25,28 +21,15 @@ MovingEntity::~MovingEntity() {
 
 double MovingEntity::getAngle() {
 	Vector2D angle = this->velocity.normalize();
-	double h = asin(angle.y) + M_PI / 2;
-	if(angle.x < 0) 
-		h = 2 * M_PI - h;
+	//double h = asin(angle.y) + M_PI / 2;
+	//if(angle.x < 0) 
+	//	h = 2 * M_PI - h;
 	
+	double h = atan2(angle.x, angle.y);
 	return h;
 }
 
 void MovingEntity::updateLines() {
-	double h = this->getAngle();
-
-	Vector2D p1 = Vector2D(0, -10).rotate(h) + position;
-	Vector2D p2 = Vector2D(4, 10).rotate(h) + position;
-	Vector2D p3 = Vector2D(-4, 10).rotate(h) + position;
-
-	dynamic_cast<Line*>(this->shapes[0])->start = p1;
-	dynamic_cast<Line*>(this->shapes[0])->end = p2;
-
-	dynamic_cast<Line*>(this->shapes[1])->start = p2;
-	dynamic_cast<Line*>(this->shapes[1])->end = p3;
-	
-	dynamic_cast<Line*>(this->shapes[2])->start = p3;
-	dynamic_cast<Line*>(this->shapes[2])->end = p1;
 }
 
 void MovingEntity::update(float delta) {
@@ -64,7 +47,8 @@ void MovingEntity::update(float delta) {
 	Vector2D force = Vector2D();
 
 	for(auto sb: this->sbs) {
-		force = force + sb->calculate();
+		auto result = sb->calculate();
+		force = force + result;
 	}
 
 	force = this->velocity + force / this->mass * delta;
@@ -125,11 +109,51 @@ void MovingEntity::clearSteeringBehaviours() {
 }
 
 
-Soldier::Soldier(Vector2D p, World& w) : MovingEntity("Soldier", p, w, Vector2D(), 20, 2) {
+Triangle::Triangle(string n, Vector2D p, World& w, Vector2D v, double m, double ms) : MovingEntity(n, p, w, v, m, ms) {
+	this->shapes.pop_back();
+
+	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
+	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
+	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
+	this->updateLines();
+}
+
+void Triangle::updateLines() {
+	double h = this->getAngle();
+
+	Vector2D p1 = Vector2D(0, -10).rotate(h) + position;
+	Vector2D p2 = Vector2D(4, 10).rotate(h) + position;
+	Vector2D p3 = Vector2D(-4, 10).rotate(h) + position;
+
+	dynamic_cast<Line*>(this->shapes[0])->start = p1;
+	dynamic_cast<Line*>(this->shapes[0])->end = p2;
+
+	dynamic_cast<Line*>(this->shapes[1])->start = p2;
+	dynamic_cast<Line*>(this->shapes[1])->end = p3;
+	
+	dynamic_cast<Line*>(this->shapes[2])->start = p3;
+	dynamic_cast<Line*>(this->shapes[2])->end = p1;
+}
+
+Soldier::Soldier(SDL_Texture** t, Vector2D p, World& w) : MovingEntity("Soldier", p, w, Vector2D(), 20, 2), texture(t) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
 	this->setGoal(new FlockGoal(*this));
+
+	this->shapes.push_back(new Sprite(this->texture, {0,0,20,15}, this->position, this->getAngle()));
 }
-Commander::Commander(Vector2D p, World& w) : MovingEntity("Commander", p, w, Vector2D(), 20, 1.5) {
+void Soldier::updateLines() {
+	dynamic_cast<Sprite*>(this->shapes[0])->setPosition(this->position);
+	dynamic_cast<Sprite*>(this->shapes[0])->setAngle(this->getAngle());
+}
+
+Commander::Commander(SDL_Texture** t, Vector2D p, World& w) : MovingEntity("Commander", p, w, Vector2D(), 20, 1.5), texture(t) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
 	this->setGoal(new PatrolGoal(*this));
+
+	this->shapes.push_back(new Sprite(this->texture, {0,0,20,15}, this->position, this->getAngle()));
+}
+void Commander::updateLines() {
+	dynamic_cast<Sprite*>(this->shapes[0])->setPosition(this->position);
+	dynamic_cast<Sprite*>(this->shapes[0])->setAngle(this->getAngle());
+	//cout << "Commander: " << this->position << ", " << this->getAngle() << endl;
 }

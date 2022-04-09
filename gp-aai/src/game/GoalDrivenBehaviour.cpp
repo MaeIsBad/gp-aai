@@ -102,4 +102,12 @@ PatrolGoal::PatrolGoal(MovingEntity& entity) {
 	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, -100)));
 }
 
+/************* FollowPathGoal *************/
+
+FollowPathGoal::FollowPathGoal(MovingEntity& entity, vector<Vector2D> points) {
+	for(auto vec : points) {
+		this->AddSubGoal(new SeekGoal(entity, vec));
+	}
+}
+
 

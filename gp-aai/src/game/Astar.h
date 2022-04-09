@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "../util/Vector2D.h"
+#include "../util/Shapes.h"
 
 using std::vector;
 
@@ -40,14 +41,19 @@ class Vertex {
 class Graph {
 	private:
 		vector<Vertex*> vertices;
+		vector<Shape*> shapes;
 
 	public:
 		Graph();
+		~Graph();
 
 		void addVertex(Vertex* vertex);
 
 		Vertex* findClosest(Vector2D pos);
+		Vertex* vertexAt(Vector2D pos);
 		vector<Vector2D> shortestPathPoints(Vector2D from, Vector2D to);
 		vector<Vertex*> shortestPath(Vertex* from, Vertex* to);
+        const vector<Shape*> render();
+		void addShape(Shape* shape);
 };
 
