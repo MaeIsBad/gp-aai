@@ -1,6 +1,9 @@
 #pragma once
 class MovingEntity;
 #include "../util/Vector2D.h"
+#include <vector>
+
+using std::vector;
 
 class SteeringBehaviour {
 	protected:
@@ -34,6 +37,15 @@ class ObstacleAvoidanceBehaviour : public SteeringBehaviour {
 		double detection_radius;
 	public:
 		ObstacleAvoidanceBehaviour(MovingEntity& me, double detection_radius);
+		Vector2D calculate() override;
+};
+
+class FlockingBehaviour : public SteeringBehaviour {
+	private:
+		vector<MovingEntity*>& group;
+
+	public:
+		FlockingBehaviour(MovingEntity& me, vector<MovingEntity*>& group);
 		Vector2D calculate() override;
 };
 

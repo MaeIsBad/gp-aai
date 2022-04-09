@@ -11,7 +11,7 @@
 
 #include <csignal>
 
-#define WORLD_GRAPH_DENSITY 100
+#define WORLD_GRAPH_DENSITY 10
 
 #define breakpoint std::raise(SIGINT)
 using std::cout, std::endl, std::shared_ptr;
@@ -32,11 +32,11 @@ World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Ve
     //    this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree", Vector2D(dist6(rng), dist6(rng)), *this)));
     //}
 
-    for(int i=-this->width/2; i<this->width/2; i+=WORLD_GRAPH_DENSITY) {
-        for(int o=-this->height/2; o<this->height/2; o+=WORLD_GRAPH_DENSITY) {
-            this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree", Vector2D(i, o), *this)));
-        }
-    }
+    //for(int i=-this->width/2; i<this->width/2; i+=WORLD_GRAPH_DENSITY) {
+    //    for(int o=-this->height/2; o<this->height/2; o+=WORLD_GRAPH_DENSITY) {
+    //        this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree", Vector2D(i, o), *this)));
+    //    }
+    //}
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 1", Vector2D(-100, -100), *this)));
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 2", Vector2D(100, 100), *this)));
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 3", Vector2D(-100, 100), *this)));
@@ -51,6 +51,7 @@ World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Ve
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 12", Vector2D(170, 100), *this)));
     //this->entities.push_back(shared_ptr<BaseEntity>(new TreeEntity("Tree 13", Vector2D(70, 60), *this)));
 
+    cout << "--" << endl;
     this->generateGraph();
 
 }

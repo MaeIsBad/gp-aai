@@ -94,3 +94,11 @@ Vector2D ObstacleAvoidanceBehaviour::calculate() {
 
 	return entity.toWorldSpace(steering_force);
 }
+
+FlockingBehaviour::FlockingBehaviour(MovingEntity& me, vector<MovingEntity*>& group) : SteeringBehaviour(me), group(group) {}
+
+Vector2D FlockingBehaviour::calculate() {
+	
+
+	return Vector2D();
+}

@@ -1,9 +1,9 @@
 #include <cassert>
 #include <iostream>
-#include "Fuzzy/FuzzyVariable.h"
-#include "Fuzzy/FuzzyRule.h"
-#include "Fuzzy/FuzzyRuleSet.h"
-#include "Fuzzy/FuzzySet.h"
+#include "../Fuzzy/FuzzyVariable.h"
+#include "../Fuzzy/FuzzyRule.h"
+#include "../Fuzzy/FuzzyRuleSet.h"
+#include "../Fuzzy/FuzzySet.h"
 
 using std::cout, std::endl;
 
@@ -21,7 +21,7 @@ void run_Fuzzy_tests() {
 	FuzzyVariable testdesireability = FuzzyVariable("testdesireability", 0.02, -2, 0, 1, FuzzyVariableShape::RightShoulder);	// very
 
 	/*aanmaken van de FuzzyVariables */
-	FuzzyVariable DistanceClose		= FuzzyVariable("DistanceClose", 0.00001, (1-0.00025), -1.0 / 125, 1.2, FuzzyVariableShape::LeftShoulder);
+	FuzzyVariable DistanceClose		= FuzzyVariable("DistanceClose", 0.00001, (1 - 0.00025), -1.0 / 125, 1.2, FuzzyVariableShape::LeftShoulder);
 	FuzzyVariable DistanceMedium	= FuzzyVariable("DistanceMedium", 1.2/150, -0.2, -1.0 / 150, 2, FuzzyVariableShape::Triangle);
 	FuzzyVariable DistanceFar		= FuzzyVariable("DistanceFar", 1.0/150, -1, 0, 1, FuzzyVariableShape::RightShoulder);
 

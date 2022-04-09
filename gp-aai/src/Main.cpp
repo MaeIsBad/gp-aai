@@ -146,7 +146,7 @@ int main(int argc, char* argv[])  {
     // Run tests first
     run_Vector2D_tests();
     run_Fuzzy_tests();
-    //run_Astar_tests();
+    run_Astar_tests();
     //return 0;
 
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
