@@ -106,6 +106,55 @@ void display_loop(World* world) {
                     }
                 }
 
+                drawTile(renderer, Background_Tx, 1, 0, 7, 7);
+                drawTile(renderer, Background_Tx, 1, 1, 7, 8);
+                drawTile(renderer, Background_Tx, 1, 1, 7, 9);
+                drawTile(renderer, Background_Tx, 1, 1, 7, 10);
+                drawTile(renderer, Background_Tx, 1, 1, 7, 11);
+                drawTile(renderer, Background_Tx, 1, 2, 7, 12);
+
+                drawTile(renderer, Background_Tx, 2, 0, 8, 7);
+                drawTile(renderer, Background_Tx, 1, 7, 8, 8);
+                drawTile(renderer, Background_Tx, 1, 7, 8, 9);
+                drawTile(renderer, Background_Tx, 1, 7, 8, 10);
+                drawTile(renderer, Background_Tx, 1, 7, 8, 11);
+                drawTile(renderer, Background_Tx, 2, 2, 8, 12);
+
+                drawTile(renderer, Background_Tx, 2, 0, 9, 7);
+                drawTile(renderer, Background_Tx, 1, 7, 9, 8);
+                drawTile(renderer, Background_Tx, 1, 7, 9, 9);
+                drawTile(renderer, Background_Tx, 1, 7, 9, 10);
+                drawTile(renderer, Background_Tx, 1, 7, 9, 11);
+                drawTile(renderer, Background_Tx, 2, 2, 9, 12);
+
+                drawTile(renderer, Background_Tx, 2, 0, 10, 7);
+                drawTile(renderer, Background_Tx, 1, 7, 10, 8);
+                drawTile(renderer, Background_Tx, 1, 7, 10, 9);
+                drawTile(renderer, Background_Tx, 1, 7, 10, 10);
+                drawTile(renderer, Background_Tx, 1, 7, 10, 11);
+                drawTile(renderer, Background_Tx, 2, 2, 10, 12);
+
+                drawTile(renderer, Background_Tx, 2, 0, 11, 7);
+                drawTile(renderer, Background_Tx, 1, 7, 11, 8);
+                drawTile(renderer, Background_Tx, 1, 7, 11, 9);
+                drawTile(renderer, Background_Tx, 1, 7, 11, 10);
+                drawTile(renderer, Background_Tx, 1, 7, 11, 11);
+                drawTile(renderer, Background_Tx, 2, 2, 11, 12);
+
+                drawTile(renderer, Background_Tx, 2, 0, 12, 7);
+                drawTile(renderer, Background_Tx, 1, 7, 12, 8);
+                drawTile(renderer, Background_Tx, 1, 7, 12, 9);
+                drawTile(renderer, Background_Tx, 1, 7, 12, 10);
+                drawTile(renderer, Background_Tx, 1, 7, 12, 11);
+                drawTile(renderer, Background_Tx, 2, 2, 12, 12);
+
+                drawTile(renderer, Background_Tx, 3, 0, 13, 7);
+                drawTile(renderer, Background_Tx, 1, 1, 13, 8);
+                drawTile(renderer, Background_Tx, 1, 1, 13, 9);
+                drawTile(renderer, Background_Tx, 1, 1, 13, 10);
+                drawTile(renderer, Background_Tx, 1, 1, 13, 11);
+                drawTile(renderer, Background_Tx, 3, 2, 13, 12);
+
                 // as TTF_RenderText_Solid could only be used on
                 // SDL_Surface then you have to create the surface first
                 SDL_Surface* surfaceMessage =

@@ -25,7 +25,7 @@ ArriveBehaviour::ArriveBehaviour(MovingEntity& me, Vector2D& seek_pos) : Steerin
 Vector2D ArriveBehaviour::calculate() {
 	Vector2D pos = entity.getPosition();
 	double length = (this->seek_pos - pos).length();
-	Vector2D force = (this->seek_pos - pos) * (1 - length / 200) * -1;
+	Vector2D force = (this->seek_pos - pos) * (1 - length / 200) * -1 / 2;
 
 	return force - entity.getVelocity();
 }
@@ -189,6 +189,10 @@ Vector2D FlockingBehaviour::calculate() {
 	Vector2D force = (CenterOfMass - pos);
 
 	SteeringForce = SteeringForce + force - this->entity.getVelocity();
+	}
+
+	if(SteeringForce.length() < 0.5) {
+		return Vector2D();
 	}
 
 	return SteeringForce;

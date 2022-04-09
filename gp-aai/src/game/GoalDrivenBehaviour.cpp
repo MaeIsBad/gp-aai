@@ -65,7 +65,7 @@ void SeekGoal::Activate() {
 }
 
 int SeekGoal::Process() {
-	if((this->seek_pos - this->entity.getPosition()).length() < 20) {
+	if((this->seek_pos - this->entity.getPosition()).length() < 10) {
 		// We're done here.
 		return 1;
 	}
@@ -81,7 +81,7 @@ void SeekGoal::Terminate() {
 FlockGoal::FlockGoal(MovingEntity& entity) : AtomicGoal(entity) {}
 
 void FlockGoal::Activate() {
-	this->entity.pushSteeringBehaviour(new FlockingBehaviour(this->entity, 200));
+	this->entity.pushSteeringBehaviour(new FlockingBehaviour(this->entity, 100));
 }
 
 int FlockGoal::Process() {

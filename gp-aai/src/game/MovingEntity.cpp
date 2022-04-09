@@ -6,7 +6,7 @@
 
 using std::cout, std::endl, std::string;
 
-MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms) : BaseEntity(n, p, w), velocity(v), mass(m), maxSpeed(ms), goal(nullptr) {
+MovingEntity::MovingEntity(string n, Vector2D p, World& w, Vector2D v, double m, double ms) : BaseEntity(n, p, w, {255, 255, 255}, 8, false), velocity(v), mass(m), maxSpeed(ms), goal(nullptr) {
 	this->shapes.pop_back();
 
 }
@@ -50,6 +50,7 @@ void MovingEntity::update(float delta) {
 		auto result = sb->calculate();
 		force = force + result;
 	}
+
 
 	force = this->velocity + force / this->mass * delta;
 	force = force.truncate(this->getMaxSpeed()) * 0.9;
@@ -135,7 +136,7 @@ void Triangle::updateLines() {
 	dynamic_cast<Line*>(this->shapes[2])->end = p1;
 }
 
-Soldier::Soldier(SDL_Texture** t, Vector2D p, World& w) : MovingEntity("Soldier", p, w, Vector2D(), 20, 2), texture(t) {
+Soldier::Soldier(SDL_Texture** t, Vector2D p, World& w) : MovingEntity("Soldier", p, w, Vector2D(), 50, 2), texture(t) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
 	this->setGoal(new FlockGoal(*this));
 
@@ -146,7 +147,7 @@ void Soldier::updateLines() {
 	dynamic_cast<Sprite*>(this->shapes[0])->setAngle(this->getAngle());
 }
 
-Commander::Commander(SDL_Texture** t, Vector2D p, World& w) : MovingEntity("Commander", p, w, Vector2D(), 20, 1.5), texture(t) {
+Commander::Commander(SDL_Texture** t, Vector2D p, World& w) : MovingEntity("Commander", p, w, Vector2D(), 50, 1.2), texture(t) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
 	this->setGoal(new PatrolGoal(*this));
 

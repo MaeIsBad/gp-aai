@@ -89,4 +89,4 @@ const vector<LocalizedEntity> BaseEntity::getLocalEntities() {
 }
 
 PointerEntity::PointerEntity(Vector2D p, World& w) : BaseEntity("POINTER", p, w, {255, 255, 0}, 8, false) {};
-TreeEntity::TreeEntity(string n, Vector2D p, World& w): BaseEntity(n, p, w, {0, 255, 0}, 25, true) {};
+WallEntity::WallEntity(string n, Vector2D p, World& w): BaseEntity(n, p, w, {0, 255, 0}, 48, true) {};

@@ -57,7 +57,7 @@ class PointerEntity : public BaseEntity {
         PointerEntity(Vector2D p, World& w);
 };
 
-class TreeEntity : public BaseEntity {
+class WallEntity : public BaseEntity {
     public:
-        TreeEntity(string n, Vector2D p, World& w);
+        WallEntity(string n, Vector2D p, World& w);
 };
