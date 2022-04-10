@@ -7,7 +7,7 @@ using std::vector;
 
 struct rulesetResult{
 
-	double DOM;
+	double DOM;						// degree of membership
 	FuzzyVariable* Concequent;
 	FuzzyVariable* Antecedent1;
 	FuzzyVariable* Antecedent2;
