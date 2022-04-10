@@ -8,7 +8,7 @@ using std::min, std::max;
 /*****************************************************/
 // standaard constructor + destructor
 FuzzyRule::FuzzyRule(FuzzyVariable* Antecedent1, FuzzyVariable* Antecedent2, FuzzyVariable* Concequent, FuzzyOperator o) {
-
+	// toekennen van de variabelen
 	this->Antecedent1 = Antecedent1;
 	this->Antecedent2 = Antecedent2;
 
@@ -30,9 +30,7 @@ double FuzzyRule::Calculate(double a, double b)
 {
 	auto resultingAntecedent1 = this->Antecedent1->Fuzzify(a);
 	auto resultingAntecedent2 = this->Antecedent2->Fuzzify(b);
-
 	double resultingConcequent = -1;
-
 
 
 	if (this->Operator == FuzzyOperator::AND) {
@@ -58,3 +56,4 @@ FuzzyVariable* FuzzyRule::getAntecedent2()
 {
 	return this->Antecedent2;
 }
+

@@ -8,6 +8,8 @@
 #include "tests/Vector2DTests.hpp"
 #include "tests/AstarTests.hpp"
 #include "tests/FuzzyTests.hpp"
+#include "Fuzzy/MakeVariables.hpp"
+
 #ifdef _WIN32
 #include <direct.h>
 #define GetCurrentDir _getcwd
@@ -19,6 +21,9 @@
 #endif
 
 using std::thread, std::cout, std::endl, std::string;
+
+//bool DEBUGGING = true;
+
 
 string get_current_dir() {
     char buff[FILENAME_MAX]; //create string buffer to hold path
@@ -144,8 +149,11 @@ int main(int argc, char* argv[])  {
     cout << get_current_dir() << endl;
 
     // Run tests first
-    run_Vector2D_tests();
-    run_Fuzzy_tests();
+    //run_Vector2D_tests();
+    //run_Fuzzy_tests();
+
+    MakeVariables();
+
     //run_Astar_tests();
     //return 0;
 

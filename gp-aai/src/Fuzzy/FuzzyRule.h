@@ -16,7 +16,7 @@ private:
 
 public:
 
-	//standaard constructor + destructor
+	// standaard constructor + destructor
 	FuzzyRule(FuzzyVariable* Antecedent1, FuzzyVariable* Antecedent2 , FuzzyVariable* Concequent , FuzzyOperator o);
 	~FuzzyRule();
 
