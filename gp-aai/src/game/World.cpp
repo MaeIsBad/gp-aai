@@ -209,6 +209,10 @@ continue_to_next:;
     return result_return;
 }
 
+World::~World() {
+    delete this->graph;
+}
+
 TTF_Font** World::getFont() {
     return &this->font;
 }

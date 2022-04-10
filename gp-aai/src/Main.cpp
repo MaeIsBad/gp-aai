@@ -206,5 +206,6 @@ int main(int argc, char* argv[])  {
     display_thread.join();
     running = false;
     logic_thread.join();
+    delete world;
     return 0;
 }
