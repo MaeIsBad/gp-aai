@@ -1,14 +1,9 @@
 #include <cassert>
 #include <iostream>
-<<<<<<< HEAD
-#include "Fuzzy/FuzzyVariable.h"
-#include "Fuzzy/FuzzyRule.h"
-=======
 #include "../Fuzzy/FuzzyVariable.h"
 #include "../Fuzzy/FuzzyRule.h"
 #include "../Fuzzy/FuzzyRuleSet.h"
 #include "../Fuzzy/FuzzySet.h"
->>>>>>> goals
 
 using std::cout, std::endl;
 
@@ -21,11 +16,6 @@ void run_Fuzzy_tests() {
 	//endA = -(1 / 150);
 	//endB = 2;
 
-<<<<<<< HEAD
-	FuzzyVariable testMedium = FuzzyVariable( 1.2 / 150 , -0.2, -1.0/150.0, 2); // medium
-	FuzzyVariable testAmmoStatOk = FuzzyVariable(0.1, 0, -0.5 , 1.5);	//okay
-	FuzzyVariable testdesireability = FuzzyVariable(0.02, -2, 0, 1);	// very
-=======
 	FuzzyVariable testMedium = FuzzyVariable("testMedium", 1.2 / 150, -0.2, -1.0 / 150.0, 2, FuzzyVariableShape::Triangle); // medium
 	FuzzyVariable testAmmoStatOk = FuzzyVariable("testAmmoStatOk", 0.1, 0, -0.05, 1.5, FuzzyVariableShape::Triangle);	//okay
 	FuzzyVariable testdesireability = FuzzyVariable("testdesireability", 0.02, -2, 0, 1, FuzzyVariableShape::RightShoulder);	// very
@@ -75,7 +65,6 @@ void run_Fuzzy_tests() {
 
 	auto result = resultSet.getMaxAV();
 	cout << "???? " << result << endl;
->>>>>>> goals
 
 	auto defuzzy1 = testMedium.DeFuzzify(0.5);
 	cout << defuzzy1[0] << "  " << defuzzy1[1] << endl;
@@ -86,12 +75,6 @@ void run_Fuzzy_tests() {
 	cout << defuzzy2[0] << "  " << defuzzy2[1] << endl;
 
 
-<<<<<<< HEAD
-	FuzzyRule ruletest = FuzzyRule( testMedium , testAmmoStatOk , testdesireability, FuzzyOperator::AND);
-
-	cout << ruletest.Calculate(100, 15) << endl;
-
-=======
 	FuzzyRule ruletest = FuzzyRule(&testMedium, &testAmmoStatOk, &testdesireability, FuzzyOperator::AND);
 
 	cout << "fuzzyfymedium (100)" << testMedium.Fuzzify(100) << endl;
@@ -100,7 +83,6 @@ void run_Fuzzy_tests() {
 
 
 
->>>>>>> goals
 }
 
 

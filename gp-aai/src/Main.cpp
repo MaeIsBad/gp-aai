@@ -8,9 +8,6 @@
 #include <string>
 #include <random>
 #include "tests/Vector2DTests.hpp"
-<<<<<<< HEAD
-#include "tests/FuzzyTests.hpp"
-=======
 #include "tests/AstarTests.hpp"
 #include "tests/FuzzyTests.hpp"
 #ifdef _WIN32
@@ -22,7 +19,6 @@
 #define GetCurrentDir getcwd
 #define path(x) "gp-aai/" x
 #endif
->>>>>>> goals
 
 using std::thread, std::cout, std::endl, std::string;
 
@@ -145,60 +141,6 @@ void display_loop(World* world) {
                     }
                 }
 
-                //drawTile(renderer, Background_Tx, 1, 0, 7, 7, 1);
-                //drawTile(renderer, Background_Tx, 1, 1, 7, 8, 1);
-                //drawTile(renderer, Background_Tx, 1, 1, 7, 9, 1);
-                //drawTile(renderer, Background_Tx, 1, 1, 7, 10, 1);
-                //drawTile(renderer, Background_Tx, 1, 1, 7, 11, 1);
-                //drawTile(renderer, Background_Tx, 1, 2, 7, 12, 1);
-
-                //drawTile(renderer, Background_Tx, 2, 0, 8, 7, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 8, 8, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 8, 9, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 8, 10, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 8, 11, 1);
-                //drawTile(renderer, Background_Tx, 2, 2, 8, 12, 1);
-
-                //drawTile(renderer, Background_Tx, 2, 0, 9, 7, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 9, 8, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 9, 9, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 9, 10, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 9, 11, 1);
-                //drawTile(renderer, Background_Tx, 2, 2, 9, 12, 1);
-
-                //drawTile(renderer, Background_Tx, 2, 0, 10, 7, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 10, 8, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 10, 9, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 10, 10, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 10, 11, 1);
-                //drawTile(renderer, Background_Tx, 2, 2, 10, 12, 1);
-
-                //drawTile(renderer, Background_Tx, 2, 0, 11, 7, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 11, 8, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 11, 9, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 11, 10, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 11, 11, 1);
-                //drawTile(renderer, Background_Tx, 2, 2, 11, 12, 1);
-
-                //drawTile(renderer, Background_Tx, 2, 0, 12, 7, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 12, 8, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 12, 9, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 12, 10, 1);
-                //drawTile(renderer, Background_Tx, 1, 7, 12, 11, 1);
-                //drawTile(renderer, Background_Tx, 2, 2, 12, 12, 1);
-
-                //drawTile(renderer, Background_Tx, 3, 0, 13, 7, 1);
-                //drawTile(renderer, Background_Tx, 1, 1, 13, 8, 1);
-                //drawTile(renderer, Background_Tx, 1, 1, 13, 9, 1);
-                //drawTile(renderer, Background_Tx, 1, 1, 13, 10, 1);
-                //drawTile(renderer, Background_Tx, 1, 1, 13, 11, 1);
-                //drawTile(renderer, Background_Tx, 3, 2, 13, 12, 1);
-
-
-                // as TTF_RenderText_Solid could only be used on
-                // SDL_Surface then you have to create the surface first
-
-
                 world->render(renderer);
 
                 // Houses on top of the world so players can walk behind
@@ -247,14 +189,8 @@ int main(int argc, char* argv[])  {
     // Run tests first
     run_Vector2D_tests();
     run_Fuzzy_tests();
-<<<<<<< HEAD
-=======
     run_Astar_tests();
-    //return 0;
 
->>>>>>> goals
-
-    /*
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
     bool running = true;
 
@@ -265,6 +201,6 @@ int main(int argc, char* argv[])  {
     // Wait for display thread to finish
     display_thread.join();
     running = false;
-    logic_thread.join();*/
+    logic_thread.join();
     return 0;
 }
