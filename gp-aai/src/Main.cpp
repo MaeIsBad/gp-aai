@@ -10,6 +10,8 @@
 #include "tests/Vector2DTests.hpp"
 #include "tests/AstarTests.hpp"
 #include "tests/FuzzyTests.hpp"
+#include <ctime>
+#include <cstdlib>
 #ifdef _WIN32
 #include <direct.h>
 #define GetCurrentDir _getcwd
@@ -190,6 +192,8 @@ int main(int argc, char* argv[])  {
     run_Vector2D_tests();
     run_Fuzzy_tests();
     run_Astar_tests();
+
+    srand(time(NULL));
 
     World* world = new World(WINDOW_WIDTH, WINDOW_HEIGHT);
     bool running = true;

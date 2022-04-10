@@ -27,6 +27,7 @@ class MovingEntity : public BaseEntity {
 
 		Team team;
 		int rocketLauncherAmmo, handGunAmmo;
+		int health;
 
 	public:
 		MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms, Team team);
@@ -45,6 +46,11 @@ class MovingEntity : public BaseEntity {
 		void pushSteeringBehaviour(SteeringBehaviour* sb);
 		void clearSteeringBehaviours();
 		Team getTeam();
+		int getRocketLauncherAmmo();
+		void setRocketLauncherAmmo(int a);
+		int getHandGunAmmo();
+		void setHandGunAmmo(int a);
+		void takeDamage(int a);
 };
 
 class Triangle : public MovingEntity {

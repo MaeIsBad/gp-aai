@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
+#include "../util/VectorMath.hpp"
 
 using std::cout, std::endl, std::invalid_argument, std::string;
 
@@ -84,6 +85,16 @@ const vector<LocalizedEntity> BaseEntity::getLocalEntities() {
 	}
 
 	return local_entities;
+}
+
+void BaseEntity::addShape(Shape *s) {
+	cout << "Shapes total: " << shapes.size() << endl;
+	this->shapes.push_back(s);
+	cout << "Added shape " << s << endl;
+}
+
+void BaseEntity::removeShape(Shape *s) {
+	this->shapes.erase(std::remove(this->shapes.begin(), this->shapes.end(), s), this->shapes.end());
 }
 
 PointerEntity::PointerEntity(Vector2D p, World* w) : BaseEntity("POINTER", p, w, {255, 255, 0}, 8, false) {

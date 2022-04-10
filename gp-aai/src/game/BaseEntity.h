@@ -49,6 +49,8 @@ class BaseEntity {
         double getRadius();
         bool isSolid();
         string getName();
+        void addShape(Shape* s);
+        void removeShape(Shape* s);
 
 };
 

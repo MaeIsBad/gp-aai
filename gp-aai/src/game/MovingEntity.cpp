@@ -6,7 +6,7 @@
 
 using std::cout, std::endl, std::string;
 
-MovingEntity::MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms, Team team) : BaseEntity(n, p, w, {255, 255, 255}, 8, false), velocity(v), mass(m), maxSpeed(ms), goal(nullptr), resetGoal(nullptr), team(team), rocketLauncherAmmo(0), handGunAmmo(0) {}
+MovingEntity::MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms, Team team) : BaseEntity(n, p, w, {255, 255, 255}, 8, false), velocity(v), mass(m), maxSpeed(ms), goal(nullptr), resetGoal(nullptr), team(team), rocketLauncherAmmo(5), handGunAmmo(5), health(10) {}
 
 MovingEntity::~MovingEntity() {
 	this->clearSteeringBehaviours();
@@ -123,6 +123,21 @@ void MovingEntity::clearSteeringBehaviours() {
 	}
 	this->sbs.clear();
 	this->steeringBehavioursLock.unlock();
+}
+int MovingEntity::getRocketLauncherAmmo() {
+	return this->rocketLauncherAmmo;
+}
+void MovingEntity::setRocketLauncherAmmo(int a) {
+	this->rocketLauncherAmmo = a;
+}
+int MovingEntity::getHandGunAmmo() {
+	return this->handGunAmmo;
+}
+void MovingEntity::setHandGunAmmo(int a) {
+	this->handGunAmmo = a;
+}
+void MovingEntity::takeDamage(int a) {
+	this->health -= a;
 }
 
 Team MovingEntity::getTeam() {
