@@ -80,7 +80,6 @@ World::World(int w, int h) : font(nullptr), width(w), height(h), seek_pos(*new P
     //}
 
 
-    cout << "--" << endl;
     //this->generateGraph();
 
 }

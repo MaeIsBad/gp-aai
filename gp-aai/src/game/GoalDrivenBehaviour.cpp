@@ -15,7 +15,6 @@ string AtomicGoal::getName() {
 
 CompositeGoal::CompositeGoal(string name) : Goal(name) {}
 CompositeGoal::~CompositeGoal() {
-	cout << "CompositeGoal::~CompositeGoal()" << endl;
 	this->subgoalsLock.lock();
 	for(auto goal : this->subgoals) {
 		delete goal;
@@ -24,7 +23,6 @@ CompositeGoal::~CompositeGoal() {
 }
 
 void CompositeGoal::Activate() {
-	cout << "CompositeGoal::Activate()" << endl;
 	this->subgoalsLock.lock();
 	if(this->subgoals.size() > 0) {
 		this->subgoals.back()->Activate();
@@ -33,7 +31,6 @@ void CompositeGoal::Activate() {
 }
 
 int CompositeGoal::Process() {
-	cout << "CompositeGoal::Process()" << endl;
 	this->subgoalsLock.lock();
 	if(this->subgoals.size() == 0) {
 		// We're empty, commit sudoku
@@ -59,7 +56,6 @@ int CompositeGoal::Process() {
 }
 
 void CompositeGoal::Terminate() {
-	cout << "CompositeGoal::Terminate()" << endl;
 	this->subgoalsLock.lock();
 	if(this->subgoals.size() > 0) {
 		this->subgoals.back()->Terminate();
@@ -68,14 +64,12 @@ void CompositeGoal::Terminate() {
 }
 
 void CompositeGoal::AddSubGoal(Goal* g) {
-	cout << "CompositeGoal::AddSubGoal() " << g << endl;
 	this->subgoalsLock.lock();
 	this->subgoals.push_back(g);
 	this->subgoalsLock.unlock();
 }
 
 string CompositeGoal::getName() {
-	cout << "CompositeGoal::getName() " << endl;
 	this->subgoalsLock.lock();
 	string name = this->name + "\n";
 	if(this->subgoals.size() > 0)

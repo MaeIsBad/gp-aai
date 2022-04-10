@@ -22,8 +22,6 @@ Line::~Line() {}
 void Line::draw(Vector2D transform, Vector2D translate, SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, this->color.r, this->color.g, this->color.b, SDL_ALPHA_OPAQUE);
 
-    cout << "Line start " << start << ", end " << end << endl;
-
     // Apply viewport transform
     Vector2D new_start = start * transform + (translate),
              new_end = end * transform + (translate);

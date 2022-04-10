@@ -12,6 +12,7 @@ MovingEntity::~MovingEntity() {
 	this->clearSteeringBehaviours();
 	for(auto shape : this->shapes) {
 		delete shape;
+		shape = nullptr;
 	}
 	this->shapes.clear();
 }
@@ -30,7 +31,6 @@ void MovingEntity::updateLines() {}
 
 void MovingEntity::update(float delta) {
 	// Update tick for goals
-	cout << "MovingEntity::update() " << this->goal << endl;
 	this->goalLock.lock();
 	if(this->goal != nullptr) {
 		auto result = this->goal->Process();
@@ -39,6 +39,7 @@ void MovingEntity::update(float delta) {
 			this->goal->Terminate();
 			if(this->goal != this->resetGoal) {
 				delete this->goal;
+				this->goal = nullptr;
 			}
 			this->goal = this->resetGoal;
 			if(this->goal != nullptr) {
@@ -99,11 +100,11 @@ Vector2D MovingEntity::toWorldSpace(Vector2D v) {
 }
 
 void MovingEntity::setGoal(Goal* goal) {
-	cout << "MovingEntity::setGoal(" << goal << ")" << endl;
 	this->goalLock.lock();
 	if(this->goal != nullptr) {
 		this->goal->Terminate();
-		delete this->goal;
+		//delete this->goal;
+		this->goal = nullptr;
 	}
 	this->goal = goal;
 	this->goal->Activate();
@@ -118,6 +119,7 @@ void MovingEntity::clearSteeringBehaviours() {
 	this->steeringBehavioursLock.lock();
 	for(auto sb : this->sbs) {
 		delete sb;
+		sb = nullptr;
 	}
 	this->sbs.clear();
 	this->steeringBehavioursLock.unlock();
@@ -179,7 +181,6 @@ void Commander::updateLines() {
 	dynamic_cast<Sprite*>(this->shapes[0])->setAngle(this->getAngle());
 	dynamic_cast<Text*>(this->shapes[1])->setPosition(this->position + Vector2D(15, -15));
 	this->goalLock.lock();
-	cout << "Commander::updateLines() " << this->goal << endl;
 	if(this->goal != nullptr)
 		dynamic_cast<Text*>(this->shapes[1])->setText(this->goal->getName().c_str());
 	this->goalLock.unlock();

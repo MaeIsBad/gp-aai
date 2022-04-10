@@ -195,9 +195,7 @@ void display_loop(World* world) {
                 // SDL_Surface then you have to create the surface first
 
 
-                cout << "-- render start --" << endl;
                 world->render(renderer);
-                cout << "-- render end --" << endl;
 
                 // Houses on top of the world so players can walk behind
                 drawHouse(renderer, Background_Tx2, 5, 12);
@@ -216,8 +214,6 @@ void display_loop(World* world) {
                         world->event(WorldEvent::mouseClick, Vector2D(ev.x, ev.y));
                     }
                 }
-
-                world->update(1);
             }
         }
 
@@ -234,9 +230,7 @@ void display_loop(World* world) {
 void logic_loop(World* world, bool* running) {
     while(*running) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 30));
-        cout << "-- update start --" << endl;
         world->update(1);
-        cout << "-- update end --" << endl;
     }
 }
 
@@ -255,11 +249,11 @@ int main(int argc, char* argv[])  {
 
     // We're handing out references since this all isn't threadsafe anyways
     thread display_thread = thread(display_loop, world);
-    //thread logic_thread = thread(logic_loop, world, &running);
+    thread logic_thread = thread(logic_loop, world, &running);
 
     // Wait for display thread to finish
     display_thread.join();
-    //running = false;
-    //logic_thread.join();
+    running = false;
+    logic_thread.join();
     return 0;
 }
