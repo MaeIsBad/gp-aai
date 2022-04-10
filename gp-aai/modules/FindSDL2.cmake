@@ -23,7 +23,7 @@ if(WIN32)
     # Search for SDL2 Debug CMake build in extern/SDL2-2.0.5-dev/build
     if(NOT SDL2_FOUND)
         # Search for SDL2 in extern/SDL2-2.0.5
-        find_path(SDL2_ROOT "include/SDL.h" PATHS "${CMAKE_CURRENT_LIST_DIR}/../extern/SDL2-2.0.5" NO_DEFAULT_PATH)
+        find_path(SDL2_ROOT "include/SDL.h" PATHS "${CMAKE_CURRENT_LIST_DIR}/../extern/SDL2-2.0.20" NO_DEFAULT_PATH)
         if(SDL2_ROOT)
             set(SDL2_INCLUDE_DIRS "${SDL2_ROOT}/include")
             set(SDL2_LIBS "${SDL2_ROOT}/lib/x64/SDL2.lib")

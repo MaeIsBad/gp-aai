@@ -17,6 +17,10 @@ double Vector2D::length() {
     return sqrt(x*x + y*y);
 }
 
+double Vector2D::manhattanLength() {
+    return x + y;
+}
+
 Vector2D Vector2D::normalize() {
     Vector2D v = Vector2D(*this);
     double length = v.length();

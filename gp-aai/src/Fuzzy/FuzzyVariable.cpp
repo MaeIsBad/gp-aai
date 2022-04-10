@@ -20,14 +20,18 @@ FuzzyVariable::~FuzzyVariable()
 }
 
 
-FuzzyVariable::FuzzyVariable(double start_a, double start_b, double end_a, double end_b)
+FuzzyVariable::FuzzyVariable(char* name, double start_a, double start_b, double end_a, double end_b, FuzzyVariableShape shape)
 {
+	this->name = name;
+
 	// waarden toekennen aan start en end waarde
 	startA = start_a;
 	startB = start_b;
 	
 	endA = end_a;
 	endB = end_b;
+
+	this->shape = shape;
 }
 
 
@@ -37,7 +41,7 @@ double FuzzyVariable::Fuzzify(double x)
 {
 	// maken van fuzzy waarde van y
 	double y = startA * x + startB;
-	if (y >= 1)
+	if (y > 1)
 	{
 		y = endA * x + endB;
 	}
@@ -57,20 +61,35 @@ vector<double> FuzzyVariable::DeFuzzify(double y)
 	double x1 = (y - this->startB) / this->startA;
 	double x2 = (y - this->endB) / this->endA;
 
-	/*
-	if (x1 < 0)
-	{
-		x = x2;
-	}
-	else
-	{
-		x = x1;
-	}*/
-
 	return vector<double>{ x1, x2 };
 }
 
 
+char* FuzzyVariable::getName()
+{
+	return this->name;
+}
+
+FuzzyVariableShape FuzzyVariable::getShape()
+{
+	return this->shape;
+}
+
+double FuzzyVariable::getCenter(double xMax)
+{
+	if (this->shape == FuzzyVariableShape::Triangle) {
+		return (1 - this->startB) / this->startA;
+	}
+	else if (this->shape == FuzzyVariableShape::LeftShoulder) {
+		return ((1 - this->endB) / this->endA) / 2;
+	}
+	else if (this->shape == FuzzyVariableShape::RightShoulder) {
+		double x = (1 - this->startB) / this->startA;
+		return (x + xMax) / 2;
+	}
+
+	return -1;
+}
 
 
 

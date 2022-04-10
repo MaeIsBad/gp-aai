@@ -1,9 +1,12 @@
 #include "Shapes.h"
 #include <SDL.h>
+#include <SDL_ttf.h>
+#include <cmath>
+#include <sstream>
 
-using std::cout, std::endl, std::vector;
+using std::cout, std::endl, std::vector, std::istringstream;
 
-void Shape::draw(Vector2D& transform, Vector2D& translate, SDL_Renderer* renderer) {}
+void Shape::draw(Vector2D transform, Vector2D translate, SDL_Renderer* renderer) {}
 Shape::Shape(Color c) : color(c) {}
 Shape::~Shape() {}
 void Shape::setColor(Color c) {
@@ -16,7 +19,7 @@ Color Shape::getColor() {
 Line::Line(Vector2D s, Vector2D e, Color c) : Shape(c), start(s), end(e) {}
 Line::~Line() {}
 
-void Line::draw(Vector2D& transform, Vector2D& translate, SDL_Renderer* renderer) {
+void Line::draw(Vector2D transform, Vector2D translate, SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, this->color.r, this->color.g, this->color.b, SDL_ALPHA_OPAQUE);
 
     // Apply viewport transform
@@ -64,7 +67,7 @@ void Circle::setColor(Color c) {
         shape->setColor(c);
     }
 }
-void Circle::draw(Vector2D& transform, Vector2D& translate, SDL_Renderer* renderer) {
+void Circle::draw(Vector2D transform, Vector2D translate, SDL_Renderer* renderer) {
     for(auto shape: shapes){
         shape->draw(transform, translate, renderer);
     }
@@ -83,4 +86,55 @@ Circle& Circle::setSides(int s) {
     this->sides = s;
     this->updateLines();
     return *this;
+}
+
+Sprite::Sprite(SDL_Texture** t, SDL_Rect s, Vector2D pos, double a) : Shape({0,0,0}), texture(t), SrcR(s), position(pos), angle(a) {}
+void Sprite::draw(Vector2D transform, Vector2D translate, SDL_Renderer* renderer) {
+    Vector2D new_pos = position * transform + (translate);
+    SDL_Rect DestR { new_pos.x, new_pos.y, SrcR.w, SrcR.h };
+    SDL_RenderCopyEx(renderer, *texture, &SrcR, &DestR, (double)(((int)(angle * 180.0 / M_PI) - 90) % 360), NULL, SDL_FLIP_NONE);
+}
+void Sprite::setPosition(Vector2D pos) {
+    this->position = pos;
+}
+void Sprite::setAngle(double a) {
+    this->angle = a;
+}
+
+Text::Text(const char* message, TTF_Font** font, Color color, Vector2D position) : Shape(color), font(font), position(position) {
+    this->messageLock.lock();
+    this->message = string(message);
+    this->messageLock.unlock();
+}
+
+void Text::draw(Vector2D transform, Vector2D translate, SDL_Renderer* renderer) {
+    this->messageLock.lock();
+    this->rects.clear();
+    Vector2D new_pos = position * transform + (translate);
+    istringstream f(this->message);
+    string s;    
+    int width, height;
+    while (getline(f, s)) {
+        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(*this->font, s.c_str(), {this->color.r, this->color.g, this->color.b}); 
+        SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+        TTF_SizeText(*this->font, s.c_str(), &width, &height);
+
+        this->rects.push_back({ new_pos.x, new_pos.y, width, height });
+        SDL_RenderCopy(renderer, Message, NULL, &(this->rects[this->rects.size() - 1]));
+        new_pos.y += height;
+
+        SDL_FreeSurface(surfaceMessage);
+        SDL_DestroyTexture(Message);
+    }
+    this->messageLock.unlock();
+}
+
+void Text::setPosition(Vector2D pos) {
+    this->position = pos;
+}
+
+void Text::setText(const char *text) {
+    this->messageLock.lock();
+    this->message = string(text);
+    this->messageLock.unlock();
 }

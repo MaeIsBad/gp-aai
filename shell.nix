@@ -6,6 +6,10 @@ mkShell {
     gdb
     cmake
     SDL2
+    SDL2_ttf
+    SDL2_image
+    neofetch
+    valgrind
   ];
 }
 
