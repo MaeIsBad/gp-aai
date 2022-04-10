@@ -101,7 +101,7 @@ void Sprite::setAngle(double a) {
     this->angle = a;
 }
 
-Text::Text(char* message, TTF_Font** font, Color color, Vector2D position) : Shape(color), font(font), position(position) {
+Text::Text(const char* message, TTF_Font** font, Color color, Vector2D position) : Shape(color), font(font), position(position) {
     this->messageLock.lock();
     this->message = string(message);
     this->messageLock.unlock();

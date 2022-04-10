@@ -211,7 +211,10 @@ void display_loop(World* world) {
                         done = SDL_TRUE;
                     } else if(event.type == SDL_MOUSEBUTTONDOWN) {
                         SDL_MouseButtonEvent ev = event.button;
-                        world->event(WorldEvent::mouseClick, Vector2D(ev.x, ev.y));
+                        if(ev.button == SDL_BUTTON_LEFT)
+                            world->event(WorldEvent::leftMouseClick, Vector2D(ev.x, ev.y));
+                        else
+                            world->event(WorldEvent::rightMouseClick, Vector2D(ev.x, ev.y));
                     }
                 }
             }

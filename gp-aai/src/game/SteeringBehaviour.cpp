@@ -108,6 +108,8 @@ Vector2D FlockingBehaviour::calculate() {
 
 		MovingEntity* e = dynamic_cast<MovingEntity*>(tmp_e.get());
 
+		if(e->getTeam() != this->entity.getTeam())
+			continue;
 
 		Vector2D to = e->getPosition() - this->entity.getPosition();
 		//the bounding radius of the other is taken into account by adding it

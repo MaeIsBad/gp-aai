@@ -79,7 +79,7 @@ class Text : public Shape {
         vector<SDL_Rect> rects;
 
     public:
-        Text(char* message, TTF_Font** font, Color color, Vector2D position);
+        Text(const char* message, TTF_Font** font, Color color, Vector2D position);
         void draw(Vector2D transform, Vector2D translate, SDL_Renderer* renderer) override;
         void setPosition(Vector2D pos);
         void setText(const char* text);

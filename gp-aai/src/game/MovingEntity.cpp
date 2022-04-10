@@ -6,7 +6,7 @@
 
 using std::cout, std::endl, std::string;
 
-MovingEntity::MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms) : BaseEntity(n, p, w, {255, 255, 255}, 8, false), velocity(v), mass(m), maxSpeed(ms), goal(nullptr), resetGoal(nullptr) {}
+MovingEntity::MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms, Team team) : BaseEntity(n, p, w, {255, 255, 255}, 8, false), velocity(v), mass(m), maxSpeed(ms), goal(nullptr), resetGoal(nullptr), team(team), rocketLauncherAmmo(0), handGunAmmo(0) {}
 
 MovingEntity::~MovingEntity() {
 	this->clearSteeringBehaviours();
@@ -125,8 +125,11 @@ void MovingEntity::clearSteeringBehaviours() {
 	this->steeringBehavioursLock.unlock();
 }
 
+Team MovingEntity::getTeam() {
+	return this->team;
+}
 
-Triangle::Triangle(string n, Vector2D p, World* w, Vector2D v, double m, double ms) : MovingEntity(n, p, w, v, m, ms) {
+Triangle::Triangle(string n, Vector2D p, World* w, Vector2D v, double m, double ms) : MovingEntity(n, p, w, v, m, ms, Team::Red) {
 	this->shapes.pop_back();
 
 	this->shapes.push_back(new Line(Vector2D(), Vector2D(), this->color));
@@ -152,7 +155,7 @@ void Triangle::updateLines() {
 	dynamic_cast<Line*>(this->shapes[2])->end = p1;
 }
 
-Soldier::Soldier(SDL_Texture** t, Vector2D p, World* w) : MovingEntity("Soldier", p, w, Vector2D(), 50, 2), texture(t) {
+Soldier::Soldier(SDL_Texture** t, Vector2D p, World* w, Team team) : MovingEntity("Soldier", p, w, Vector2D(), 50, 2, team), texture(t) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
 	this->resetGoal = new FlockGoal(*this);
 	this->setGoal(this->resetGoal);
@@ -164,9 +167,9 @@ void Soldier::updateLines() {
 	dynamic_cast<Sprite*>(this->shapes[0])->setAngle(this->getAngle());
 }
 
-Commander::Commander(SDL_Texture** t, Vector2D p, World* w, int team) : MovingEntity("Commander", p, w, Vector2D(), 50, 1.2), texture(t) {
+Commander::Commander(SDL_Texture** t, Vector2D p, World* w, Team team) : MovingEntity("Commander", p, w, Vector2D(), 50, 1.2, team), texture(t) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
-	if(team == 1)
+	if(team == Team::Blue)
 		this->resetGoal = new BlueThink(*this);
 	else
 		this->resetGoal = new RedThink(*this);
@@ -174,7 +177,9 @@ Commander::Commander(SDL_Texture** t, Vector2D p, World* w, int team) : MovingEn
 	this->setGoal(this->resetGoal);
 
 	this->shapes.push_back(new Sprite(this->texture, {0,0,20,15}, this->position, this->getAngle()));
-	this->shapes.push_back(new Text("", w->getFont(), {255, 255, 255},  this->position));
+	this->goalLock.lock();
+	this->shapes.push_back(new Text(this->goal->getName().c_str(), w->getFont(), {255, 255, 255}, this->position));
+	this->goalLock.unlock();
 }
 void Commander::updateLines() {
 	dynamic_cast<Sprite*>(this->shapes[0])->setPosition(this->position);
@@ -185,3 +190,4 @@ void Commander::updateLines() {
 		dynamic_cast<Text*>(this->shapes[1])->setText(this->goal->getName().c_str());
 	this->goalLock.unlock();
 }
+

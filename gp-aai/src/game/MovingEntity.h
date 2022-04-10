@@ -6,6 +6,10 @@
 #include "GoalDrivenBehaviour.h"
 #include <mutex>
 
+enum class Team {
+	Red, Blue
+};
+
 class MovingEntity : public BaseEntity {
 	protected:
 		Vector2D velocity;
@@ -21,8 +25,11 @@ class MovingEntity : public BaseEntity {
 		Goal* resetGoal;
 		mutex goalLock;
 
+		Team team;
+		int rocketLauncherAmmo, handGunAmmo;
+
 	public:
-		MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms);
+		MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms, Team team);
 		~MovingEntity();
 		void update(float delta) override;
 
@@ -37,6 +44,7 @@ class MovingEntity : public BaseEntity {
 
 		void pushSteeringBehaviour(SteeringBehaviour* sb);
 		void clearSteeringBehaviours();
+		Team getTeam();
 };
 
 class Triangle : public MovingEntity {
@@ -50,7 +58,7 @@ class Soldier : public MovingEntity {
 		SDL_Texture** texture;
 
 	public:
-		Soldier(SDL_Texture**, Vector2D p, World* w);
+		Soldier(SDL_Texture**, Vector2D p, World* w, Team team);
 		void updateLines() override;
 };
 class Commander : public MovingEntity {
@@ -58,6 +66,6 @@ class Commander : public MovingEntity {
 		SDL_Texture** texture;
 
 	public:
-		Commander(SDL_Texture**, Vector2D p, World* w, int team);
+		Commander(SDL_Texture**, Vector2D p, World* w, Team team);
 		void updateLines() override;
 };

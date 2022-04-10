@@ -39,22 +39,9 @@ void addHouseWalls(vector<shared_ptr<BaseEntity>>& entities, int w, int h, int s
     entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 7), h/2 - 16 * (sy  + 7)), world)));
 }
 
-World::World(int w, int h) : font(nullptr), width(w), height(h), seek_pos(*new PointerEntity(Vector2D(-w/2, -h/2), this)), redSoldierSprite(nullptr), blueSoldierSprite(nullptr), commander(*new Commander(&blueSoldierSprite, Vector2D(0, 0), this, 1)) {
+World::World(int w, int h) : font(nullptr), width(w), height(h), seek_pos(*new PointerEntity(Vector2D(-w/2, -h/2), this)), redSoldierSprite(nullptr), blueSoldierSprite(nullptr), blueCommander(nullptr), redCommander(nullptr) {
 
     this->entities.push_back(shared_ptr<BaseEntity>(&this->seek_pos));
-    this->entities.push_back(shared_ptr<BaseEntity>(&this->commander));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(-10, -10), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(-10, 10), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(10, -10), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(11, 12), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(12, 12), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(13, 13), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(14, 12), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(37, 26), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(68, 47), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(27, 12), this)));
-
-    this->entities.push_back(shared_ptr<BaseEntity>(new Commander(&redSoldierSprite, Vector2D(), this, 2)));
 
     addHouseWalls(this->entities, this->width, this->height, 5, 12, this);
     addHouseWalls(this->entities, this->width, this->height, 30, 29, this);
@@ -64,6 +51,20 @@ World::World(int w, int h) : font(nullptr), width(w), height(h), seek_pos(*new P
 
     this->transform = Vector2D(1, -1);
     this->translate = Vector2D(this->width/2, this->height/2);
+
+    this->redCommander = new Commander(&redSoldierSprite, Vector2D(), this, Team::Red);
+    this->entities.push_back(shared_ptr<BaseEntity>(this->redCommander));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&redSoldierSprite, Vector2D(-10, -10), this, Team::Red)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&redSoldierSprite, Vector2D(-10, 10), this, Team::Red)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&redSoldierSprite, Vector2D(10, -10), this, Team::Red)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&redSoldierSprite, Vector2D(11, 12), this, Team::Red)));
+
+    this->blueCommander = new Commander(&blueSoldierSprite, Vector2D(), this, Team::Blue);
+    this->entities.push_back(shared_ptr<BaseEntity>(this->blueCommander));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(12, 12), this, Team::Blue)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(13, 13), this, Team::Blue)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(14, 12), this, Team::Blue)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(37, 26), this, Team::Blue)));
 
     //std::random_device dev;
     //std::mt19937 rng(dev());
@@ -129,8 +130,10 @@ void World::render(SDL_Renderer* renderer){
 void World::event(WorldEvent e, Vector2D pos) {
     pos = pos * this->transform - (this->transform * this->translate);
     this->seek_pos.setPosition(pos);
-    //auto shortest_path = this->shortestPath(this->commander.getPosition(), pos);
-    this->commander.setGoal(new ShortestPathGoal(commander, pos));
+    if(e == WorldEvent::leftMouseClick)
+        this->redCommander->setGoal(new ShortestPathGoal(*this->redCommander, pos));
+    else
+        this->blueCommander->setGoal(new ShortestPathGoal(*this->blueCommander, pos));
 }
 
 Vector2D& World::getSeekPosition() {

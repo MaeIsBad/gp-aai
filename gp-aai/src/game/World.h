@@ -11,7 +11,7 @@ class Commander;
 
 using std::vector, std::shared_ptr, std::mutex;
 
-enum WorldEvent { mouseClick };
+enum WorldEvent { leftMouseClick, rightMouseClick };
 
 class World {
 
@@ -19,7 +19,8 @@ class World {
         int width, height;
         vector<shared_ptr<BaseEntity>> entities;
         BaseEntity& seek_pos;
-        Commander& commander;
+        Commander* redCommander;
+        Commander* blueCommander;
 
         Vector2D transform, translate;
         SDL_Texture* redSoldierSprite;
