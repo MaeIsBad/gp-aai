@@ -31,6 +31,7 @@ class World {
 
     public:
         World(int w, int h);
+        ~World();
         void update(float delta);
         void render(SDL_Renderer* renderer);
         void event(WorldEvent e, Vector2D pos);
