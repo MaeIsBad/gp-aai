@@ -55,4 +55,5 @@ void run_Astar_tests() {
         cout << "Vertex with position " << vertex->getPosition() << endl;
     }
 
+    delete graph;
 }
