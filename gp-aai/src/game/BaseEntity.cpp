@@ -7,9 +7,7 @@
 using std::cout, std::endl, std::invalid_argument, std::string;
 
 BaseEntity::BaseEntity(string n, Vector2D p, World& w) : BaseEntity(n, p, w, {255, 255, 255}, 8, true) {}
-BaseEntity::BaseEntity(string n, Vector2D p, World& w, Color c, double r, bool s) : position(p), world(w), color(c), radius(r), solid(s), name(n) {
-	this->shapes.push_back(new Circle(this->position, this->radius, this->color));
-}
+BaseEntity::BaseEntity(string n, Vector2D p, World& w, Color c, double r, bool s) : position(p), world(w), color(c), radius(r), solid(s), name(n) {}
 
 // Rule of three
 BaseEntity::BaseEntity(BaseEntity& b) : BaseEntity(b.name, b.position, b.world, b.color, b.radius, b.solid) {}
@@ -59,8 +57,8 @@ void BaseEntity::setColor(Color c) {
 	dynamic_cast<Circle*>(this->shapes[0])->setColor(this->color);
 }
 
-World& BaseEntity::getWorld() {
-	return this->world;
+World* BaseEntity::getWorld() {
+	return &this->world;
 }
 
 double BaseEntity::getRadius() {
@@ -88,5 +86,7 @@ const vector<LocalizedEntity> BaseEntity::getLocalEntities() {
 	return local_entities;
 }
 
-PointerEntity::PointerEntity(Vector2D p, World& w) : BaseEntity("POINTER", p, w, {255, 255, 0}, 8, false) {};
-WallEntity::WallEntity(string n, Vector2D p, World& w): BaseEntity(n, p, w, {0, 255, 0}, 48, true) {};
+PointerEntity::PointerEntity(Vector2D p, World& w) : BaseEntity("POINTER", p, w, {255, 255, 0}, 8, false) {
+	this->shapes.push_back(new Circle(this->position, this->radius, this->color));
+}
+WallEntity::WallEntity(string n, Vector2D p, World& w): BaseEntity(n, p, w, {0, 255, 0}, 48, true) {}

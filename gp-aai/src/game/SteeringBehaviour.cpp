@@ -102,7 +102,7 @@ Vector2D FlockingBehaviour::calculate() {
 	vector<MovingEntity*> neighbours;
 	
 	//iterate through all entities checking for range
-	for(auto tmp_e : this->entity.getWorld().getEntities()) {
+	for(auto tmp_e : this->entity.getWorld()->getEntities()) {
 		if(!instanceof<MovingEntity>(tmp_e.get())) 
 			continue;
 

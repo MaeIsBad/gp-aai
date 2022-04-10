@@ -43,7 +43,7 @@ class BaseEntity {
         Vector2D& getPosition();
 
         void setColor(Color c);
-        World& getWorld();
+        World* getWorld();
 
         virtual const vector<LocalizedEntity> getLocalEntities();
         double getRadius();

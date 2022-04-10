@@ -24,6 +24,11 @@ void CompositeGoal::Activate() {
 }
 
 int CompositeGoal::Process() {
+	if(this->subgoals.size() == 0) {
+		// We're empty, commit sudoku
+		return 1;
+	}
+
 	auto goal = this->subgoals.back();
 	auto result = goal->Process();
 
@@ -35,11 +40,6 @@ int CompositeGoal::Process() {
 		if(this->subgoals.size() > 0) {
 			this->subgoals.back()->Activate();
 		}
-	}
-
-	if(this->subgoals.size() == 0) {
-		// We're empty, commit sudoku
-		return 1;
 	}
 
 	return 0;
@@ -76,6 +76,7 @@ void SeekGoal::Terminate() {
 	this->entity.clearSteeringBehaviours();
 }
 
+
 /************* FlockGoal **************/
 
 FlockGoal::FlockGoal(MovingEntity& entity) : AtomicGoal(entity) {}
@@ -95,11 +96,10 @@ void FlockGoal::Terminate() {
 /************* PatrolGoal *************/
 
 PatrolGoal::PatrolGoal(MovingEntity& entity) {
-	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, -100)));
-	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, 100)));
-	this->AddSubGoal(new SeekGoal(entity, Vector2D(100, 100)));
-	this->AddSubGoal(new SeekGoal(entity, Vector2D(100, -100)));
-	this->AddSubGoal(new SeekGoal(entity, Vector2D(-100, -100)));
+	this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(300, -200)));
+	//this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(300, 200)));
+	//this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(-300, 200)));
+	//this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(-300, -200)));
 }
 
 /************* FollowPathGoal *************/
@@ -111,3 +111,25 @@ FollowPathGoal::FollowPathGoal(MovingEntity& entity, vector<Vector2D> points) {
 }
 
 
+/************** ShortestPathGoal ************/
+
+ShortestPathGoal::ShortestPathGoal(MovingEntity& entity, Vector2D to) : AtomicGoal(entity), to(to), followPathGoal(nullptr) {}
+ShortestPathGoal::~ShortestPathGoal() {
+	if(this->followPathGoal != nullptr)
+		delete this->followPathGoal;
+}
+
+void ShortestPathGoal::Activate() {
+	if(this->followPathGoal != nullptr)
+		delete this->followPathGoal;
+
+    auto shortest_path = entity.getWorld()->shortestPath(entity.getPosition(), to);
+	this->followPathGoal = new FollowPathGoal(entity, shortest_path);
+	this->followPathGoal->Activate();
+}
+int ShortestPathGoal::Process() {
+	return this->followPathGoal->Process();
+}
+void ShortestPathGoal::Terminate() {
+	this->followPathGoal->Terminate();
+}

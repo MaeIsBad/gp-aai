@@ -8,22 +8,22 @@ else()
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
     # baaaaa
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings -Wno-unused-result")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings -Wno-unused-result -Wno-narrowing")
 endif(MSVC)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
-find_package(SDL2 REQUIRED COMPONENTS main)
-find_package(SDL_ttf REQUIRED COMPONENTS)
-find_package(SDL_image REQUIRED COMPONENTS)
 
+find_package(SDL2 REQUIRED COMPONENTS main)
 message("SDL2_INCLUDE_DIRS: ${SDL2_INCLUDE_DIRS}")
 message("SDL2_LIBS: ${SDL2_LIBS}")
 message("SDL2_DLLS: ${SDL2_DLLS}")
 
+find_package(SDL_ttf REQUIRED COMPONENTS)
 message("SDL2_ttf_INCLUDE_DIRS: ${SDL2_ttf_INCLUDE_DIRS}")
 message("SDL2_ttf_LIBS: ${SDL2_ttf_LIBS}")
 message("SDL2_ttf_DLLS: ${SDL2_ttf_DLLS}")
 
+find_package(SDL_image REQUIRED COMPONENTS)
 message("SDL2_image_INCLUDE_DIRS: ${SDL2_image_INCLUDE_DIRS}")
 message("SDL2_image_LIBS: ${SDL2_image_LIBS}")
 message("SDL2_image_DLLS: ${SDL2_image_DLLS}")

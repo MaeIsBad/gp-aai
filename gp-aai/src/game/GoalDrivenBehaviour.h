@@ -69,4 +69,17 @@ class FollowPathGoal : public CompositeGoal {
 		FollowPathGoal(MovingEntity& entity, vector<Vector2D> points);
 };
 
+class ShortestPathGoal : public AtomicGoal {
+	private:
+		Vector2D to;
+		FollowPathGoal* followPathGoal;
+
+	public:
+		ShortestPathGoal(MovingEntity& entity, Vector2D pos);
+		~ShortestPathGoal();
+		void Activate();
+		int Process();
+		void Terminate();
+};
+
 #include "MovingEntity.h"

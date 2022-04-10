@@ -26,6 +26,18 @@
 #define breakpoint std::raise(SIGINT)
 using std::cout, std::endl, std::shared_ptr;
 
+void addHouseWalls(vector<shared_ptr<BaseEntity>>& entities, int w, int h, int sx, int sy, World* world) {
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 4), h/2 - 16 * (sy  + 6)), *world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 5), h/2 - 16 * (sy  + 6)), *world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 6), h/2 - 16 * (sy  + 6)), *world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 7), h/2 - 16 * (sy  + 6)), *world)));
+
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 4), h/2 - 16 * (sy  + 7)), *world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 5), h/2 - 16 * (sy  + 7)), *world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 6), h/2 - 16 * (sy  + 7)), *world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 7), h/2 - 16 * (sy  + 7)), *world)));
+}
+
 World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Vector2D(-w/2, -h/2), *this)), soldierSprite(nullptr), commander(*new Commander(&soldierSprite, Vector2D(0, 0), *this)), graph(nullptr) {
 
 
@@ -42,6 +54,11 @@ World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Ve
     this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(37, 26), *this)));
     this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(68, 47), *this)));
     this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(27, 12), *this)));
+
+    addHouseWalls(this->entities, this->width, this->height, 5, 12, this);
+    addHouseWalls(this->entities, this->width, this->height, 30, 29, this);
+    addHouseWalls(this->entities, this->width, this->height, 28, 10, this);
+    addHouseWalls(this->entities, this->width, this->height, 20, 2, this);
 
 
     this->transform = *new Vector2D(1, -1);
@@ -60,19 +77,8 @@ World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Ve
     //        this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Tree", Vector2D(i, o), *this)));
     //    }
     //}
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-280, 180), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-280, 164), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-280, 148), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-280, 132), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-280, 118), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-280, 102), *this)));
 
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-184, 180), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-184, 164), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-184, 148), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-184, 132), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-184, 118), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-184, 102), *this)));
+
     cout << "--" << endl;
     //this->generateGraph();
 
@@ -125,8 +131,10 @@ const vector<shared_ptr<BaseEntity>> World::getEntities() {
 }
 
 vector<Vector2D> World::shortestPath(Vector2D start, Vector2D end) {
-    if(this->graph != nullptr)
+    if(this->graph != nullptr) {
         delete this->graph;
+        this->graph = nullptr;
+    }
 
     graph = new Graph();
 
