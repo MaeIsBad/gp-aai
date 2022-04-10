@@ -4,7 +4,7 @@
 #include "BaseEntity.h"
 #include "SteeringBehaviour.h"
 #include "GoalDrivenBehaviour.h"
-//#include <SDL.h>
+#include <mutex>
 
 class MovingEntity : public BaseEntity {
 	protected:
@@ -13,10 +13,13 @@ class MovingEntity : public BaseEntity {
 		double maxSpeed;
 
 		vector<SteeringBehaviour*> sbs;
+		mutex steeringBehavioursLock;
 		virtual void updateLines();
 		double getAngle();
 
 		Goal* goal;
+		Goal* resetGoal;
+		mutex goalLock;
 
 	public:
 		MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms);
@@ -55,6 +58,6 @@ class Commander : public MovingEntity {
 		SDL_Texture** texture;
 
 	public:
-		Commander(SDL_Texture**, Vector2D p, World* w);
+		Commander(SDL_Texture**, Vector2D p, World* w, int team);
 		void updateLines() override;
 };

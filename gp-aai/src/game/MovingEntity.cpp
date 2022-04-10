@@ -6,7 +6,7 @@
 
 using std::cout, std::endl, std::string;
 
-MovingEntity::MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms) : BaseEntity(n, p, w, {255, 255, 255}, 8, false), velocity(v), mass(m), maxSpeed(ms), goal(nullptr) {}
+MovingEntity::MovingEntity(string n, Vector2D p, World* w, Vector2D v, double m, double ms) : BaseEntity(n, p, w, {255, 255, 255}, 8, false), velocity(v), mass(m), maxSpeed(ms), goal(nullptr), resetGoal(nullptr) {}
 
 MovingEntity::~MovingEntity() {
 	this->clearSteeringBehaviours();
@@ -26,27 +26,37 @@ double MovingEntity::getAngle() {
 	return h;
 }
 
-void MovingEntity::updateLines() {
-}
+void MovingEntity::updateLines() {}
 
 void MovingEntity::update(float delta) {
 	// Update tick for goals
+	cout << "MovingEntity::update() " << this->goal << endl;
+	this->goalLock.lock();
 	if(this->goal != nullptr) {
 		auto result = this->goal->Process();
 
 		if(result > 0) {
-			delete this->goal;
-			this->goal = nullptr;
+			this->goal->Terminate();
+			if(this->goal != this->resetGoal) {
+				delete this->goal;
+			}
+			this->goal = this->resetGoal;
+			if(this->goal != nullptr) {
+				this->goal->Activate();
+			}
 		}
 	}
+	this->goalLock.unlock();
 
 	// Update tick for steering
 	Vector2D force = Vector2D();
 
+	this->steeringBehavioursLock.lock();
 	for(auto sb: this->sbs) {
 		auto result = sb->calculate();
 		force = force + result;
 	}
+	this->steeringBehavioursLock.unlock();
 
 
 	force = this->velocity + force / this->mass * delta;
@@ -89,21 +99,28 @@ Vector2D MovingEntity::toWorldSpace(Vector2D v) {
 }
 
 void MovingEntity::setGoal(Goal* goal) {
+	cout << "MovingEntity::setGoal(" << goal << ")" << endl;
+	this->goalLock.lock();
 	if(this->goal != nullptr) {
 		this->goal->Terminate();
 		delete this->goal;
 	}
 	this->goal = goal;
-	goal->Activate();
+	this->goal->Activate();
+	this->goalLock.unlock();
 }
 void MovingEntity::pushSteeringBehaviour(SteeringBehaviour* sb) {
+	this->steeringBehavioursLock.lock();
 	this->sbs.push_back(sb);
+	this->steeringBehavioursLock.unlock();
 }
 void MovingEntity::clearSteeringBehaviours() {
+	this->steeringBehavioursLock.lock();
 	for(auto sb : this->sbs) {
 		delete sb;
 	}
 	this->sbs.clear();
+	this->steeringBehavioursLock.unlock();
 }
 
 
@@ -135,7 +152,8 @@ void Triangle::updateLines() {
 
 Soldier::Soldier(SDL_Texture** t, Vector2D p, World* w) : MovingEntity("Soldier", p, w, Vector2D(), 50, 2), texture(t) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
-	this->setGoal(new FlockGoal(*this));
+	this->resetGoal = new FlockGoal(*this);
+	this->setGoal(this->resetGoal);
 
 	this->shapes.push_back(new Sprite(this->texture, {0,0,20,15}, this->position, this->getAngle()));
 }
@@ -144,14 +162,25 @@ void Soldier::updateLines() {
 	dynamic_cast<Sprite*>(this->shapes[0])->setAngle(this->getAngle());
 }
 
-Commander::Commander(SDL_Texture** t, Vector2D p, World* w) : MovingEntity("Commander", p, w, Vector2D(), 50, 1.2), texture(t) {
+Commander::Commander(SDL_Texture** t, Vector2D p, World* w, int team) : MovingEntity("Commander", p, w, Vector2D(), 50, 1.2), texture(t) {
 	//this->sbs.push_back(new ObstacleAvoidanceBehaviour(*this, 100));
-	this->setGoal(new PatrolGoal(*this));
+	if(team == 1)
+		this->resetGoal = new BlueThink(*this);
+	else
+		this->resetGoal = new RedThink(*this);
+
+	this->setGoal(this->resetGoal);
 
 	this->shapes.push_back(new Sprite(this->texture, {0,0,20,15}, this->position, this->getAngle()));
+	this->shapes.push_back(new Text("", w->getFont(), {255, 255, 255},  this->position));
 }
 void Commander::updateLines() {
 	dynamic_cast<Sprite*>(this->shapes[0])->setPosition(this->position);
 	dynamic_cast<Sprite*>(this->shapes[0])->setAngle(this->getAngle());
-	//cout << "Commander: " << this->position << ", " << this->getAngle() << endl;
+	dynamic_cast<Text*>(this->shapes[1])->setPosition(this->position + Vector2D(15, -15));
+	this->goalLock.lock();
+	cout << "Commander::updateLines() " << this->goal << endl;
+	if(this->goal != nullptr)
+		dynamic_cast<Text*>(this->shapes[1])->setText(this->goal->getName().c_str());
+	this->goalLock.unlock();
 }

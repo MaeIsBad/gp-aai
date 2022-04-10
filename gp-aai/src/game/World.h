@@ -1,13 +1,15 @@
 #pragma once
 #include "../util/Vector2D.h"
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <memory>
 #include <vector>
+#include <mutex>
 #include "Astar.h"
 class BaseEntity;
 class Commander;
 
-using std::vector, std::shared_ptr;
+using std::vector, std::shared_ptr, std::mutex;
 
 enum WorldEvent { mouseClick };
 
@@ -20,8 +22,11 @@ class World {
         Commander& commander;
 
         Vector2D transform, translate;
-        SDL_Texture* soldierSprite;
+        SDL_Texture* redSoldierSprite;
+        SDL_Texture* blueSoldierSprite;
         Graph* graph;
+        TTF_Font* font;
+        mutex graphLock;
 
     public:
         World(int w, int h);
@@ -33,5 +38,6 @@ class World {
         const vector<shared_ptr<BaseEntity>> getEntities();
 
         vector<Vector2D> shortestPath(Vector2D start, Vector2D end);
+        TTF_Font** getFont();
 };
 

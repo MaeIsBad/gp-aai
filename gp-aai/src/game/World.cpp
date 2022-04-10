@@ -6,6 +6,7 @@
 #include "World.h"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -38,22 +39,22 @@ void addHouseWalls(vector<shared_ptr<BaseEntity>>& entities, int w, int h, int s
     entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 7), h/2 - 16 * (sy  + 7)), world)));
 }
 
-World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Vector2D(-w/2, -h/2), this)), soldierSprite(nullptr), commander(*new Commander(&soldierSprite, Vector2D(0, 0), this)) {
-
-
+World::World(int w, int h) : font(nullptr), width(w), height(h), seek_pos(*new PointerEntity(Vector2D(-w/2, -h/2), this)), redSoldierSprite(nullptr), blueSoldierSprite(nullptr), commander(*new Commander(&blueSoldierSprite, Vector2D(0, 0), this, 1)) {
 
     this->entities.push_back(shared_ptr<BaseEntity>(&this->seek_pos));
     this->entities.push_back(shared_ptr<BaseEntity>(&this->commander));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(-10, -10), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(-10, 10), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(10, -10), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(11, 12), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(12, 12), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(13, 13), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(14, 12), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(37, 26), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(68, 47), this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(27, 12), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(-10, -10), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(-10, 10), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(10, -10), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(11, 12), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(12, 12), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(13, 13), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(14, 12), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(37, 26), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(68, 47), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&blueSoldierSprite, Vector2D(27, 12), this)));
+
+    this->entities.push_back(shared_ptr<BaseEntity>(new Commander(&redSoldierSprite, Vector2D(), this, 2)));
 
     addHouseWalls(this->entities, this->width, this->height, 5, 12, this);
     addHouseWalls(this->entities, this->width, this->height, 30, 29, this);
@@ -61,8 +62,8 @@ World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Ve
     addHouseWalls(this->entities, this->width, this->height, 20, 2, this);
 
 
-    this->transform = *new Vector2D(1, -1);
-    this->translate = *new Vector2D(this->width/2, this->height/2);
+    this->transform = Vector2D(1, -1);
+    this->translate = Vector2D(this->width/2, this->height/2);
 
     //std::random_device dev;
     //std::mt19937 rng(dev());
@@ -91,21 +92,30 @@ void World::update(float delta) {
 }
 
 void World::render(SDL_Renderer* renderer){
-    if(this->soldierSprite == nullptr){
-        SDL_Surface* Loading_Surf = IMG_Load(path("PlayerShooting.png"));
-        this->soldierSprite = SDL_CreateTextureFromSurface(renderer, Loading_Surf);
+    if(this->redSoldierSprite == nullptr){
+        SDL_Surface* Loading_Surf = IMG_Load(path("RedPlayerShooting.png"));
+        this->redSoldierSprite = SDL_CreateTextureFromSurface(renderer, Loading_Surf);
         SDL_FreeSurface(Loading_Surf); 
+        Loading_Surf = IMG_Load(path("BluePlayerShooting.png"));
+        this->blueSoldierSprite = SDL_CreateTextureFromSurface(renderer, Loading_Surf);
+        SDL_FreeSurface(Loading_Surf); 
+    }
+
+    if(this->font == nullptr) {
+        this->font = TTF_OpenFont(path("Arial.ttf"), 9);
     }
 
     vector<Shape*> shapes;
 
-    if(this->graph != nullptr)
+    this->graphLock.lock();
+
+    if(this->graph != nullptr) {
         shapes += this->graph->render();
+    }
 
     for(auto entity: this->entities) {
         shapes += entity->render();
     }
-
 
     //breakpoint;
     // Create viewport transformation vector
@@ -113,13 +123,15 @@ void World::render(SDL_Renderer* renderer){
     for(auto shape: shapes) {
         shape->draw(this->transform, this->translate, renderer);
     }
+
+    this->graphLock.unlock();
 }
 
 void World::event(WorldEvent e, Vector2D pos) {
     pos = pos * this->transform - (this->transform * this->translate);
     this->seek_pos.setPosition(pos);
-    auto shortest_path = this->shortestPath(this->commander.getPosition(), pos);
-    this->commander.setGoal(new FollowPathGoal(commander, shortest_path));
+    //auto shortest_path = this->shortestPath(this->commander.getPosition(), pos);
+    this->commander.setGoal(new ShortestPathGoal(commander, pos));
 }
 
 Vector2D& World::getSeekPosition() {
@@ -131,13 +143,13 @@ const vector<shared_ptr<BaseEntity>> World::getEntities() {
 }
 
 vector<Vector2D> World::shortestPath(Vector2D start, Vector2D end) {
+    this->graphLock.lock();
     if(this->graph != nullptr) {
         delete this->graph;
         this->graph = nullptr;
     }
 
     this->graph = new Graph();
-    cout << "new graph @" << graph << endl;
 
     for(int x=-this->width/2; x<=this->width/2; x+=WORLD_GRAPH_DENSITY) {
         for(int y=-this->height/2; y<=this->height/2; y+=WORLD_GRAPH_DENSITY) {
@@ -190,5 +202,11 @@ continue_to_next:;
     }
 
 
+    this->graphLock.unlock();
+
     return result_return;
+}
+
+TTF_Font** World::getFont() {
+    return &this->font;
 }

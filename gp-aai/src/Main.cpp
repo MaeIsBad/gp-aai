@@ -77,7 +77,6 @@ void display_loop(World* world) {
         SDL_Texture* Background_Tx2;
 
         //this opens a font style and sets a size
-        TTF_Font* Sans = TTF_OpenFont(path("Arial.ttf"), 24);
 
         // this is the color in rgb format,
         // maxing out all would give you the color white,
@@ -194,37 +193,11 @@ void display_loop(World* world) {
 
                 // as TTF_RenderText_Solid could only be used on
                 // SDL_Surface then you have to create the surface first
-                SDL_Surface* surfaceMessage =
-                    TTF_RenderText_Solid(Sans, "put your text here", White); 
-
-                // now you can convert it into a texture
-                SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-
-                SDL_Rect Message_rect; //create a rect
-                Message_rect.x = 500;  //controls the rect's x coordinate 
-                Message_rect.y = 500; // controls the rect's y coordinte
-                Message_rect.w = 100; // controls the width of the rect
-                Message_rect.h = 30; // controls the height of the rect
-
-                // (0,0) is on the top left of the window/screen,
-                // think a rect as the text's box,
-                // that way it would be very simple to understand
-
-                // Now since it's a texture, you have to put RenderCopy
-                // in your game loop area, the area where the whole code executes
-
-                // you put the renderer's name first, the Message,
-                // the crop size (you can ignore this if you don't want
-                // to dabble with cropping), and the rect which is the size
-                // and coordinate of your texture
-                SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
-
-                // Don't forget to free your surface and texture
-                SDL_FreeSurface(surfaceMessage);
-                SDL_DestroyTexture(Message);
 
 
+                cout << "-- render start --" << endl;
                 world->render(renderer);
+                cout << "-- render end --" << endl;
 
                 // Houses on top of the world so players can walk behind
                 drawHouse(renderer, Background_Tx2, 5, 12);
@@ -243,6 +216,8 @@ void display_loop(World* world) {
                         world->event(WorldEvent::mouseClick, Vector2D(ev.x, ev.y));
                     }
                 }
+
+                world->update(1);
             }
         }
 
@@ -259,7 +234,9 @@ void display_loop(World* world) {
 void logic_loop(World* world, bool* running) {
     while(*running) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 30));
+        cout << "-- update start --" << endl;
         world->update(1);
+        cout << "-- update end --" << endl;
     }
 }
 
@@ -278,11 +255,11 @@ int main(int argc, char* argv[])  {
 
     // We're handing out references since this all isn't threadsafe anyways
     thread display_thread = thread(display_loop, world);
-    thread logic_thread = thread(logic_loop, world, &running);
+    //thread logic_thread = thread(logic_loop, world, &running);
 
     // Wait for display thread to finish
     display_thread.join();
-    running = false;
-    logic_thread.join();
+    //running = false;
+    //logic_thread.join();
     return 0;
 }
