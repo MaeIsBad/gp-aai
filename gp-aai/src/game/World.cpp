@@ -27,33 +27,33 @@
 using std::cout, std::endl, std::shared_ptr;
 
 void addHouseWalls(vector<shared_ptr<BaseEntity>>& entities, int w, int h, int sx, int sy, World* world) {
-    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 4), h/2 - 16 * (sy  + 6)), *world)));
-    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 5), h/2 - 16 * (sy  + 6)), *world)));
-    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 6), h/2 - 16 * (sy  + 6)), *world)));
-    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 7), h/2 - 16 * (sy  + 6)), *world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 4), h/2 - 16 * (sy  + 6)), world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 5), h/2 - 16 * (sy  + 6)), world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 6), h/2 - 16 * (sy  + 6)), world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 7), h/2 - 16 * (sy  + 6)), world)));
 
-    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 4), h/2 - 16 * (sy  + 7)), *world)));
-    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 5), h/2 - 16 * (sy  + 7)), *world)));
-    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 6), h/2 - 16 * (sy  + 7)), *world)));
-    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 7), h/2 - 16 * (sy  + 7)), *world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 4), h/2 - 16 * (sy  + 7)), world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 5), h/2 - 16 * (sy  + 7)), world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 6), h/2 - 16 * (sy  + 7)), world)));
+    entities.push_back(shared_ptr<BaseEntity>(new WallEntity("Wall", Vector2D(-w/2 + 16 * (sx + 7), h/2 - 16 * (sy  + 7)), world)));
 }
 
-World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Vector2D(-w/2, -h/2), *this)), soldierSprite(nullptr), commander(*new Commander(&soldierSprite, Vector2D(0, 0), *this)), graph(nullptr) {
+World::World(int w, int h) : width(w), height(h), seek_pos(*new PointerEntity(Vector2D(-w/2, -h/2), this)), soldierSprite(nullptr), commander(*new Commander(&soldierSprite, Vector2D(0, 0), this)) {
 
 
 
     this->entities.push_back(shared_ptr<BaseEntity>(&this->seek_pos));
     this->entities.push_back(shared_ptr<BaseEntity>(&this->commander));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(-10, -10), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(-10, 10), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(10, -10), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(11, 12), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(12, 12), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(13, 13), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(14, 12), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(37, 26), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(68, 47), *this)));
-    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(27, 12), *this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(-10, -10), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(-10, 10), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(10, -10), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(11, 12), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(12, 12), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(13, 13), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(14, 12), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(37, 26), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(68, 47), this)));
+    this->entities.push_back(shared_ptr<BaseEntity>(new Soldier(&soldierSprite, Vector2D(27, 12), this)));
 
     addHouseWalls(this->entities, this->width, this->height, 5, 12, this);
     addHouseWalls(this->entities, this->width, this->height, 30, 29, this);
@@ -136,7 +136,8 @@ vector<Vector2D> World::shortestPath(Vector2D start, Vector2D end) {
         this->graph = nullptr;
     }
 
-    graph = new Graph();
+    this->graph = new Graph();
+    cout << "new graph @" << graph << endl;
 
     for(int x=-this->width/2; x<=this->width/2; x+=WORLD_GRAPH_DENSITY) {
         for(int y=-this->height/2; y<=this->height/2; y+=WORLD_GRAPH_DENSITY) {
@@ -183,10 +184,11 @@ continue_to_next:;
     vector<Vector2D> result_return;
     Vector2D last_point = result[0]->getPosition();
     for(auto vertex : result) {
-        cout << "Vertex with position " << vertex->getPosition() << endl;
         result_return.push_back(vertex->getPosition());
         graph->addShape(new Line(vertex->getPosition(), last_point, {255, 255, 255}));
         last_point = vertex->getPosition();
     }
+
+
     return result_return;
 }

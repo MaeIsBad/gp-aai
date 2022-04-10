@@ -97,9 +97,9 @@ void FlockGoal::Terminate() {
 
 PatrolGoal::PatrolGoal(MovingEntity& entity) {
 	this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(300, -200)));
-	//this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(300, 200)));
-	//this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(-300, 200)));
-	//this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(-300, -200)));
+	this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(300, 200)));
+	this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(-300, 200)));
+	this->AddSubGoal(new ShortestPathGoal(entity, Vector2D(-300, -200)));
 }
 
 /************* FollowPathGoal *************/

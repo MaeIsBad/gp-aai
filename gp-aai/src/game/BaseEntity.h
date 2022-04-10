@@ -19,7 +19,7 @@ class BaseEntity {
 
     protected:
         Vector2D position;
-        World& world;
+        World* world;
         double radius;
         Color color;
         bool solid;
@@ -27,8 +27,8 @@ class BaseEntity {
         vector<Shape*> shapes;
 
     public:
-        BaseEntity(string name, Vector2D p, World& w);
-        BaseEntity(string name, Vector2D p, World& w, Color c, double d, bool s);
+        BaseEntity(string name, Vector2D p, World* w);
+        BaseEntity(string name, Vector2D p, World* w, Color c, double d, bool s);
 
         // Rule of 3
         BaseEntity(BaseEntity& b);
@@ -54,10 +54,10 @@ class BaseEntity {
 
 class PointerEntity : public BaseEntity {
     public:
-        PointerEntity(Vector2D p, World& w);
+        PointerEntity(Vector2D p, World* w);
 };
 
 class WallEntity : public BaseEntity {
     public:
-        WallEntity(string n, Vector2D p, World& w);
+        WallEntity(string n, Vector2D p, World* w);
 };
