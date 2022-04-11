@@ -22,12 +22,11 @@ FuzzyVariable::~FuzzyVariable()
 
 FuzzyVariable::FuzzyVariable(char* name, double start_a, double start_b, double end_a, double end_b, FuzzyVariableShape shape)
 {
+	// waarden toekennen aan name, start, end en shape
 	this->name = name;
-
-	// waarden toekennen aan start en end waarde
+		
 	startA = start_a;
 	startB = start_b;
-	
 	endA = end_a;
 	endB = end_b;
 
@@ -39,14 +38,12 @@ FuzzyVariable::FuzzyVariable(char* name, double start_a, double start_b, double 
 // functies
 double FuzzyVariable::Fuzzify(double x)
 {
-	// maken van fuzzy waarde van y
+	// maken van fuzzy waarde
 	double y = startA * x + startB;
-	if (y > 1)
-	{
+	if (y > 1) {
 		y = endA * x + endB;
 	}
-	if (y <= 0)
-	{
+	if (y <= 0) {
 		y = 0;
 	}
 
@@ -57,7 +54,7 @@ double FuzzyVariable::Fuzzify(double x)
 vector<double> FuzzyVariable::DeFuzzify(double y)
 {
 	double x;
-	// maken van vaste waarde voor x van fuzzy waarde y
+	// uitrekenen van de snijpunten
 	double x1 = (y - this->startB) / this->startA;
 	double x2 = (y - this->endB) / this->endA;
 

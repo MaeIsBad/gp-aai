@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "../util/Vector2D.h"
+#include "../util/Shapes.h"
 #include <mutex>
 class MovingEntity;
 
@@ -115,6 +116,25 @@ class BlueThink : public AtomicGoal {
 	public:
 		BlueThink(MovingEntity& entity);
 		~BlueThink();
+		void Activate() override;
+		int Process() override;
+		void Terminate() override;
+		string getName() override;
+};
+
+class ShootyShootyPewPew : public CompositeGoal {
+	public:
+		ShootyShootyPewPew(MovingEntity& entity);
+};
+
+class TakeShotGoal : public AtomicGoal {
+	private:
+		MovingEntity& enemy;
+		Line* lazor;
+		int ticks;
+
+	public:
+		TakeShotGoal(MovingEntity& entity, MovingEntity& enemy);
 		void Activate() override;
 		int Process() override;
 		void Terminate() override;
